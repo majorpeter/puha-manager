@@ -8,6 +8,12 @@ slave = Slave('192.168.0.211', 23)
 
 @app.route('/')
 def index():
-    output = 'Temp: %.1f °C<br/>\n' % slave.get_temperature()
-    output += 'RH: %d %%\n<br/>' % slave.get_humidity_percentage()
-    return output
+    data = []
+    data.append(('Temperature', slave.get_temperature()))
+    data.append(('RH', slave.get_humidity_percentage()))
+    data.append(('Light', slave.get_light_lux()))
+    return str(data)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
