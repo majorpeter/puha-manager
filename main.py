@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from Slave import Slave
 
@@ -14,6 +14,13 @@ def index():
     data.append(('Light', slave.get_light_lux()))
 
     return render_template('index.html', data=data)
+
+
+@app.route('/led', methods=['POST'])
+def ledstrip_control():
+    rgb_str = request.form['rgb']
+    slave.client.root.LEDSTRIP.ColorRgb = rgb_str
+    return ''
 
 
 if __name__ == '__main__':
