@@ -1,0 +1,3 @@
+[submodule "mprotocol_client_python"]
+	path = mprotocol_client_python
+	url = https://github.com/majorpeter/mprotocol-client-python.git
