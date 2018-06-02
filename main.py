@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from Slave import Slave
 
@@ -12,7 +12,8 @@ def index():
     data.append(('Temperature', slave.get_temperature()))
     data.append(('RH', slave.get_humidity_percentage()))
     data.append(('Light', slave.get_light_lux()))
-    return '<html><head><script type="text/javascript">setTimeout(function(){location.reload();}, 1000);</script></head><body>' + str(data) + '</body></html>'
+
+    return render_template('index.html', body=str(data))
 
 
 if __name__ == '__main__':
