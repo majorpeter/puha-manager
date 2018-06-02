@@ -4,23 +4,46 @@
     <meta charset="UTF-8">
     <title>PUHA</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css" media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-  <nav>
+<nav>
     <div class="nav-wrapper indigo">
-      <a href="#" class="brand-logo">PUHA Control Panel</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="/settings">Settings</a></li>
-      </ul>
+        <a href="#" class="brand-logo">PUHA Control Panel</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/settings">Settings</a></li>
+        </ul>
     </div>
-  </nav>
+</nav>
 
-  <table class="highlight">
-      <thead>
-        <tr><th>Name</th><th>Value</th></tr>
-      </thead><tbody>
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">LED Control</span>
+        <p class="range-field">
+            <input type="range" id="red" min="0" max="255" value="0"/>
+        </p>
+        <p class="range-field">
+            <input type="range" id="green" min="0" max="255" value="0"/>
+        </p>
+        <p class="range-field">
+            <input type="range" id="blue" min="0" max="255" value="0"/>
+        </p>
+    </div>
+    <div class="card-action">
+        <a href="#">Turn lights ON</a>
+        <a href="#">Turn lights OFF</a>
+    </div>
+</div>
+
+<table class="highlight">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for item in data %}
     <tr>
         <td>{{item[0]}}</td>
@@ -28,7 +51,7 @@
     </tr>
     {% endfor %}
     </tbody>
-    </table>
-    <script type="text/javascript" src="static/js/materialize.min.js"></script>
+</table>
+<script type="text/javascript" src="static/js/materialize.min.js"></script>
 </body>
 </html>
