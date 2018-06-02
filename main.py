@@ -13,7 +13,7 @@ def index():
     data.append(('RH', slave.get_humidity_percentage()))
     data.append(('Light', slave.get_light_lux()))
 
-    return render_template('index.html', body=str(data))
+    return render_template('index.html', data=data)
 
 
 if __name__ == '__main__':
