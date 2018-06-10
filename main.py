@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from flask.json import jsonify
 
 from Slave import Slave
 
@@ -16,11 +17,14 @@ def index():
     return render_template('index.html', data=data)
 
 
-@app.route('/led', methods=['POST'])
+@app.route('/led', methods=['GET', 'POST'])
 def ledstrip_control():
-    rgb_str = request.form['rgb']
-    slave.client.root.LEDSTRIP.ColorRgb = rgb_str
-    return ''
+    if request.method == 'POST':
+        rgb_str = request.form['rgb']
+        slave.client.root.LEDSTRIP.ColorRgb = rgb_str
+        return ''
+    elif request.method == 'GET':
+        return jsonify({'rgb': str(slave.client.root.LEDSTRIP.ColorRgb)})
 
 
 if __name__ == '__main__':
