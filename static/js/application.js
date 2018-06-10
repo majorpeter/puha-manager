@@ -1,14 +1,24 @@
+undo_rgb = null;
+
 $(document).ready(function() {
     $('input#led-red, input#led-green, input#led-blue').change(function() {
         update_ledcolor();
     });
+    $('a#led-undo').click(function() {
+        $.post('/led', {rgb: undo_rgb}, function() {
+            undo_rgb = null;
+            refresh_ledcolor();
+        })
+    });
     $('a#led-on').click(function() {
         $.post('/led', {rgb: '255,255,255'}, function() {
+            undo_rgb = get_led_sliders_rgb();
             refresh_ledcolor();
         })
     });
     $('a#led-off').click(function() {
         $.post('/led', {rgb: '0,0,0'}, function() {
+            undo_rgb = get_led_sliders_rgb();
             refresh_ledcolor();
         })
     });
@@ -31,14 +41,17 @@ function refresh_ledcolor() {
 }
 
 function update_ledcolor() {
+    undo_rgb = null;
     $.post('/led', {rgb: get_led_sliders_rgb()});
     refresh_ledbuttons();
 }
 
 function refresh_ledbuttons() {
     rgb = get_led_sliders_rgb();
+    undo_display = (undo_rgb != null);
     on_display = (rgb != '255,255,255');
     off_display = (rgb != '0,0,0');
+    $('a#led-undo').css('display', undo_display ? 'inline' : 'none');
     $('a#led-on').css('display', on_display ? 'inline' : 'none');
     $('a#led-off').css('display', off_display ? 'inline' : 'none');
 }
