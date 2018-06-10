@@ -1,0 +1,11 @@
+.tabs.teal-text .tab a {
+    color: #009688 !important;
+}
+
+.tabs.teal-text .indicator {
+    background-color: #4db6ac;
+}
+
+.tabs.teal-text .tab a:focus, .tabs.teal-text .tab a:focus.active {
+    background-color: #b2dfdb;
+}
