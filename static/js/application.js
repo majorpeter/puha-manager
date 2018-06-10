@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('input#red, input#green, input#blue').change(function() {
+    $('input#led-red, input#led-green, input#led-blue').change(function() {
         update_ledcolor();
     });
 
@@ -9,13 +9,13 @@ $(document).ready(function() {
 function init_ledcolor() {
     $.get('/led', function(data) {
         rgb = data['rgb'].split(',');
-        $('input#red').val(rgb[0]);
-        $('input#green').val(rgb[1]);
-        $('input#blue').val(rgb[2]);
+        $('input#led-red').val(rgb[0]);
+        $('input#led-green').val(rgb[1]);
+        $('input#led-blue').val(rgb[2]);
     });
 }
 
 function update_ledcolor() {
-    rgb = $('input#red').val() + ',' + $('input#green').val() + ',' + $('input#blue').val();
+    rgb = $('input#led-red').val() + ',' + $('input#led-green').val() + ',' + $('input#led-blue').val();
     $.post('/led', {rgb: rgb});
 }
