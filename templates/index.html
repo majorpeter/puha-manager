@@ -10,51 +10,69 @@
     <script type="text/javascript" src="static/js/application.js"></script>
 </head>
 <body>
-<nav>
-    <div class="nav-wrapper teal">
-        <a href="#" class="brand-logo">PUHA Control Panel</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="/settings">Settings</a></li>
-        </ul>
-    </div>
-</nav>
+<header>
+    <nav>
+        <div class="nav-wrapper teal">
+            <a href="#" class="brand-logo">PUHA Control Panel</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/settings">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <div class="section">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title"><i class="material-icons">color_lens</i> LED Control</span>
+                            <p class="range-field">
+                                <input type="range" id="led-red" min="0" max="255" value="0"/>
+                            </p>
+                            <p class="range-field">
+                                <input type="range" id="led-green" min="0" max="255" value="0"/>
+                            </p>
+                            <p class="range-field">
+                                <input type="range" id="led-blue" min="0" max="255" value="0"/>
+                            </p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#" id="led-undo" class="teal-text" style="display: none;"><i class="tiny material-icons">undo</i> Revert</a>
+                            <a href="#" id="led-on" class="teal-text"><i class="tiny material-icons">brightness_high</i> Turn lights ON</a>
+                            <a href="#" id="led-off" class="teal-text"><i class="tiny material-icons">block</i> Turn lights OFF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-    <div class="card-content">
-        <span class="card-title"><i class="material-icons">color_lens</i> LED Control</span>
-        <p class="range-field">
-            <input type="range" id="led-red" min="0" max="255" value="0"/>
-        </p>
-        <p class="range-field">
-            <input type="range" id="led-green" min="0" max="255" value="0"/>
-        </p>
-        <p class="range-field">
-            <input type="range" id="led-blue" min="0" max="255" value="0"/>
-        </p>
+        <div class="section">
+            <div class="row">
+                <div class="col">
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in data %}
+                        <tr>
+                            <td>{{item[0]}}</td>
+                            <td>{{item[1]}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-action">
-        <a href="#" id="led-undo" class="teal-text" style="display: none;"><i class="tiny material-icons">undo</i> Revert</a>
-        <a href="#" id="led-on" class="teal-text"><i class="tiny material-icons">brightness_high</i> Turn lights ON</a>
-        <a href="#" id="led-off" class="teal-text"><i class="tiny material-icons">block</i> Turn lights OFF</a>
-    </div>
-</div>
+</main>
 
-<table class="highlight">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for item in data %}
-    <tr>
-        <td>{{item[0]}}</td>
-        <td>{{item[1]}}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
 <script type="text/javascript" src="static/js/materialize.min.js"></script>
 </body>
 </html>
