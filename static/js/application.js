@@ -2,11 +2,21 @@ $(document).ready(function() {
     $('input#led-red, input#led-green, input#led-blue').change(function() {
         update_ledcolor();
     });
+    $('a#led-on').click(function() {
+        $.post('/led', {rgb: '255,255,255'}, function() {
+            refresh_ledcolor();
+        })
+    });
+    $('a#led-off').click(function() {
+        $.post('/led', {rgb: '0,0,0'}, function() {
+            refresh_ledcolor();
+        })
+    });
 
-    init_ledcolor();
+    refresh_ledcolor();
 });
 
-function init_ledcolor() {
+function refresh_ledcolor() {
     $.get('/led', function(data) {
         rgb = data['rgb'].split(',');
         $('input#led-red').val(rgb[0]);
