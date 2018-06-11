@@ -1,5 +1,6 @@
 undo_rgb = null;
 rgb_values = [0, 0, 0];
+hsl_values = [0, 0, 0];
 relative_brightness = 0;
 
 $(document).ready(function() {
@@ -9,19 +10,19 @@ $(document).ready(function() {
     $('a#led-undo').click(function() {
         $.post('/led', {rgb: undo_rgb}, function() {
             undo_rgb = null;
-            refresh_ledcolor();
+            update_led_sliders_from_server();
         })
     });
     $('a#led-on').click(function() {
         $.post('/led', {rgb: '255,255,255'}, function() {
             undo_rgb = get_led_sliders_rgb();
-            refresh_ledcolor();
+            update_led_sliders_from_server();
         })
     });
     $('a#led-off').click(function() {
         $.post('/led', {rgb: '0,0,0'}, function() {
             undo_rgb = get_led_sliders_rgb();
-            refresh_ledcolor();
+            update_led_sliders_from_server();
         })
     });
     $('a#led-darker-btn').click(function() {
@@ -31,22 +32,28 @@ $(document).ready(function() {
         change_brightness(1);
     });
 
-    refresh_ledcolor();
+    update_led_sliders_from_server();
 });
 
 function get_led_sliders_rgb() {
     return $('input#led-red').val() + ',' + $('input#led-green').val() + ',' + $('input#led-blue').val();
 }
 
-function refresh_ledcolor() {
+function update_led_sliders_from_server() {
     $.get('/led', function(data) {
         rgb_values = data['rgb'].split(',');
         relative_brightness = 0;
+        hsl_values = data['hsl'].split(',');
 
         $('input#led-red').val(rgb_values[0]);
         $('input#led-green').val(rgb_values[1]);
         $('input#led-blue').val(rgb_values[2]);
-        refresh_ledbuttons();
+
+        $('input#led-hue').val(hsl_values[0]);
+        $('input#led-saturation').val(hsl_values[1]);
+        $('input#led-lightness').val(hsl_values[2]);
+
+        update_led_buttons_visibility();
     });
 }
 
@@ -63,7 +70,7 @@ function on_rgb_sliders_changed(is_user_input) {
     }
 
     $.post('/led', {rgb: get_led_sliders_rgb()});
-    refresh_ledbuttons();
+    update_led_buttons_visibility();
 }
 
 function change_brightness(delta) {
@@ -90,7 +97,7 @@ function change_brightness(delta) {
     on_rgb_sliders_changed(false);
 }
 
-function refresh_ledbuttons() {
+function update_led_buttons_visibility() {
     rgb = get_led_sliders_rgb();
     undo_display = (undo_rgb != null);
     on_display = (rgb != '255,255,255');
