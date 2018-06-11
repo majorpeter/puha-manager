@@ -41,6 +41,8 @@ function get_led_sliders_rgb() {
 function refresh_ledcolor() {
     $.get('/led', function(data) {
         rgb_values = data['rgb'].split(',');
+        relative_brightness = 0;
+
         $('input#led-red').val(rgb_values[0]);
         $('input#led-green').val(rgb_values[1]);
         $('input#led-blue').val(rgb_values[2]);
@@ -69,21 +71,21 @@ function change_brightness(delta) {
     var CHANNEL_MAX = 255;
 
     relative_brightness += delta;
-    var red = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * rgb_values[0]);
-    if (red > CHANNEL_MAX) {
-        red = CHANNEL_MAX;
+
+    var corrected_rgb_values = rgb_values.slice();
+    for (i in corrected_rgb_values) {
+        if (corrected_rgb_values[i] == 0) {
+            corrected_rgb_values[i] = 0.5;
+        }
+        corrected_rgb_values[i] = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * corrected_rgb_values[i]);
+        if (corrected_rgb_values[i] > CHANNEL_MAX) {
+            corrected_rgb_values[i] = CHANNEL_MAX;
+        }
     }
-    var green = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * rgb_values[1]);
-    if (green > CHANNEL_MAX) {
-        green = CHANNEL_MAX;
-    }
-    var blue = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * rgb_values[2]);
-    if (blue > CHANNEL_MAX) {
-        blue = CHANNEL_MAX;
-    }
-    $('input#led-red').val(red);
-    $('input#led-green').val(green);
-    $('input#led-blue').val(blue);
+
+    $('input#led-red').val(corrected_rgb_values[0]);
+    $('input#led-green').val(corrected_rgb_values[1]);
+    $('input#led-blue').val(corrected_rgb_values[2]);
 
     on_rgb_sliders_changed(false);
 }
