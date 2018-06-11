@@ -1,8 +1,10 @@
 undo_rgb = null;
+rgb_values = [0, 0, 0];
+relative_brightness = 0;
 
 $(document).ready(function() {
     $('input#led-red, input#led-green, input#led-blue').change(function() {
-        update_ledcolor();
+        on_rgb_sliders_changed(true);
     });
     $('a#led-undo').click(function() {
         $.post('/led', {rgb: undo_rgb}, function() {
@@ -22,6 +24,12 @@ $(document).ready(function() {
             refresh_ledcolor();
         })
     });
+    $('a#led-darker-btn').click(function() {
+        change_brightness(-1);
+    });
+    $('a#led-brighter-btn').click(function() {
+        change_brightness(1);
+    });
 
     refresh_ledcolor();
 });
@@ -32,18 +40,52 @@ function get_led_sliders_rgb() {
 
 function refresh_ledcolor() {
     $.get('/led', function(data) {
-        rgb = data['rgb'].split(',');
-        $('input#led-red').val(rgb[0]);
-        $('input#led-green').val(rgb[1]);
-        $('input#led-blue').val(rgb[2]);
+        rgb_values = data['rgb'].split(',');
+        $('input#led-red').val(rgb_values[0]);
+        $('input#led-green').val(rgb_values[1]);
+        $('input#led-blue').val(rgb_values[2]);
         refresh_ledbuttons();
     });
 }
 
-function update_ledcolor() {
+function on_rgb_sliders_changed(is_user_input) {
     undo_rgb = null;
+    if (is_user_input) {
+        rgb_values = [
+            $('input#led-red').val(),
+            $('input#led-green').val(),
+            $('input#led-blue').val()
+        ];
+
+        relative_brightness = 0;
+    }
+
     $.post('/led', {rgb: get_led_sliders_rgb()});
     refresh_ledbuttons();
+}
+
+function change_brightness(delta) {
+    var BRIGHTNESS_QUOTIENT = 1.25;
+    var CHANNEL_MAX = 255;
+
+    relative_brightness += delta;
+    var red = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * rgb_values[0]);
+    if (red > CHANNEL_MAX) {
+        red = CHANNEL_MAX;
+    }
+    var green = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * rgb_values[1]);
+    if (green > CHANNEL_MAX) {
+        green = CHANNEL_MAX;
+    }
+    var blue = Math.round(Math.pow(BRIGHTNESS_QUOTIENT, relative_brightness) * rgb_values[2]);
+    if (blue > CHANNEL_MAX) {
+        blue = CHANNEL_MAX;
+    }
+    $('input#led-red').val(red);
+    $('input#led-green').val(green);
+    $('input#led-blue').val(blue);
+
+    on_rgb_sliders_changed(false);
 }
 
 function refresh_ledbuttons() {
