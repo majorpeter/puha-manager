@@ -38,15 +38,29 @@
                         </div>
                         <div class="card-content">
                             <div id="led-tune-rgb">
-                                <p class="range-field">
-                                    <input type="range" id="led-red" min="0" max="255" value="0"/>
-                                </p>
-                                <p class="range-field">
-                                    <input type="range" id="led-green" min="0" max="255" value="0"/>
-                                </p>
-                                <p class="range-field">
-                                    <input type="range" id="led-blue" min="0" max="255" value="0"/>
-                                </p>
+                                <table class="invisible"><tbody>
+                                    <tr><td style="width: 1%;" title="Red">
+                                        <a class="btn-floating btn-small red"></a>
+                                    </td><td>
+                                        <p class="range-field">
+                                            <input type="range" id="led-red" min="0" max="255" value="0"/>
+                                        </p>
+                                    </td></tr>
+                                    <tr><td style="width: 1%;" title="Blue">
+                                        <a class="btn-floating btn-small green"></a>
+                                    </td><td>
+                                        <p class="range-field">
+                                            <input type="range" id="led-green" min="0" max="255" value="0"/>
+                                        </p>
+                                    </td></tr>
+                                    <tr><td style="width: 1%;" title="Green">
+                                        <a class="btn-floating btn-small blue"></a>
+                                    </td><td>
+                                        <p class="range-field">
+                                            <input type="range" id="led-blue" min="0" max="255" value="0"/>
+                                        </p>
+                                    </td></tr>
+                                </tbody></table>
                             </div>
                             <div id="led-tune-hsl">
                                 TODO

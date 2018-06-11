@@ -9,3 +9,7 @@
 .tabs.teal-text .tab a:focus, .tabs.teal-text .tab a:focus.active {
     background-color: #b2dfdb;
 }
+
+table.invisible tr {
+    border: 0;
+}
