@@ -32,6 +32,12 @@ $(document).ready(function() {
         change_brightness(1);
     });
 
+    $('div#led-tabs a').click(function(e) {
+        localStorage.setItem('activeLedTab', this.getAttribute('href'));
+        update_led_sliders_from_server();
+
+        console.log('clicked' + this.getAttribute('href'));
+    });
     update_led_sliders_from_server();
 });
 
