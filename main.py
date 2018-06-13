@@ -25,8 +25,13 @@ def ledstrip_control():
     global rgb_colors
 
     if request.method == 'POST':
-        rgb_str = request.form['rgb']
-        rgb_colors = list(map(int, rgb_str.split(',')))
+        if 'rgb' in request.form:
+            rgb_str = request.form['rgb']
+            rgb_colors = list(map(int, rgb_str.split(',')))
+        elif 'hsl' in request.form:
+            hsl_colors = list(map(int, request.form['hsl'].split(',')))
+            rgb_colors = get_rgb_colors(hsl_colors)
+            rgb_str = color_array_to_str(rgb_colors)
         slave.client.root.LEDSTRIP.ColorRgb = rgb_str
         return ''
     elif request.method == 'GET':
@@ -43,6 +48,11 @@ def color_array_to_str(array):
 def get_hsl_colors(rgb_colors):
     hls = colorsys.rgb_to_hls(rgb_colors[0] / 255, rgb_colors[1] / 255, rgb_colors[2] / 255)
     return [hls[0] * 100, hls[2] * 100, hls[1] * 100]
+
+
+def get_rgb_colors(hsl_colors):
+    rgb = colorsys.hls_to_rgb(hsl_colors[0]/ 100, hsl_colors[2] / 100, hsl_colors[1] / 100)
+    return [rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]
 
 
 if __name__ == '__main__':
