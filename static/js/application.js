@@ -7,6 +7,9 @@ $(document).ready(function() {
     $('input#led-red, input#led-green, input#led-blue').change(function() {
         on_rgb_sliders_changed(true);
     });
+    $('input#led-hue, input#led-saturation, input#led-lightness').change(function() {
+        on_hsl_sliders_changed();
+    });
     $('a#led-undo').click(function() {
         $.post('/led', {rgb: undo_rgb}, function() {
             undo_rgb = null;
@@ -77,6 +80,16 @@ function on_rgb_sliders_changed(is_user_input) {
 
     $.post('/led', {rgb: get_led_sliders_rgb()});
     update_led_buttons_visibility();
+}
+
+function on_hsl_sliders_changed() {
+    undo_rgb = null;
+    rgb_values = null;
+    relative_brightness = 0;
+    $.post('/led', {
+        hsl: $('input#led-hue').val() + ', ' + $('input#led-saturation').val() + ', ' + $('input#led-lightness').val()
+    });
+    //TODO update_led_buttons_visibility();
 }
 
 function change_brightness(delta) {
