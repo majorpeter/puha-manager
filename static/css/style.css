@@ -1,0 +1,14 @@
+div.hue-gradient {
+    background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
+
+div#led-tune-hsl div.slider-decoration {
+    height: 0px;
+    position: relative;
+    top: 16px;
+}
+
+div#led-tune-hsl div.hue-gradient {
+    height: 12px;
+    border: 1px solid white;
+}
