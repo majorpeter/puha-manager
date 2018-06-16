@@ -12,3 +12,7 @@ div#led-tune-hsl div.hue-gradient {
     height: 12px;
     border: 1px solid white;
 }
+
+a.no-break {
+        white-space: nowrap;
+}
