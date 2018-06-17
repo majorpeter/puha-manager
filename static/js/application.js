@@ -11,21 +11,21 @@ $(document).ready(function() {
         on_hsl_sliders_changed();
     });
     $('a#led-undo').click(function() {
-        $.post('/led', {rgb: undo_rgb}, function() {
+        $.post('/led', {rgb: undo_rgb, animate: 1.0}, function() {
             undo_rgb = null;
-            update_led_sliders_from_server();
+            setTimeout(update_led_sliders_from_server, 1200);
         })
     });
     $('a#led-on').click(function() {
-        $.post('/led', {rgb: '255,255,255'}, function() {
+        $.post('/led', {rgb: '255,255,255', animate: 1.0}, function() {
             undo_rgb = get_led_sliders_rgb();
-            update_led_sliders_from_server();
+            setTimeout(update_led_sliders_from_server, 1200);
         })
     });
     $('a#led-off').click(function() {
-        $.post('/led', {rgb: '0,0,0'}, function() {
+        $.post('/led', {rgb: '0,0,0', animate: 1.0}, function() {
             undo_rgb = get_led_sliders_rgb();
-            update_led_sliders_from_server();
+            setTimeout(update_led_sliders_from_server, 1200);
         })
     });
     $('a#led-darker-btn').click(function() {

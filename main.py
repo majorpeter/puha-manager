@@ -22,7 +22,10 @@ def ledstrip_control():
     if request.method == 'POST':
         if 'rgb' in request.form:
             rgb_colors = list(map(int, request.form['rgb'].split(',')))
-            slave.ledstrip.set_color_rgb(rgb_colors)
+            if 'animate' not in request.form:
+                slave.ledstrip.set_color_rgb(rgb_colors)
+            else:
+                slave.ledstrip.animate_to_rgb(rgb_colors, float(request.form['animate']))
         elif 'hsl' in request.form:
             hsl_colors = list(map(int, request.form['hsl'].split(',')))
             slave.ledstrip.set_color_hsl(hsl_colors)
