@@ -4,10 +4,10 @@ hsl_values = [0, 0, 0];
 relative_brightness = 0;
 
 $(document).ready(function() {
-    $('input#led-red, input#led-green, input#led-blue').change(function() {
+    $('input#led-red, input#led-green, input#led-blue').on('input', function() {
         on_rgb_sliders_changed(true);
     });
-    $('input#led-hue, input#led-saturation, input#led-lightness').change(function() {
+    $('input#led-hue, input#led-saturation, input#led-lightness').on('input', function() {
         on_hsl_sliders_changed();
     });
     $('a#led-undo').click(function() {
