@@ -1,5 +1,3 @@
-import colorsys
-
 from flask import Flask, render_template, request
 from flask.json import jsonify
 
@@ -7,7 +5,6 @@ from Slave import Slave
 
 app = Flask(__name__)
 slave = Slave('192.168.0.211', 23)
-rgb_colors = [0, 0, 0]
 
 
 @app.route('/')
@@ -22,37 +19,19 @@ def index():
 
 @app.route('/led', methods=['GET', 'POST'])
 def ledstrip_control():
-    global rgb_colors
-
     if request.method == 'POST':
         if 'rgb' in request.form:
-            rgb_str = request.form['rgb']
-            rgb_colors = list(map(int, rgb_str.split(',')))
+            rgb_colors = list(map(int, request.form['rgb'].split(',')))
+            slave.ledstrip.set_color_rgb(rgb_colors)
         elif 'hsl' in request.form:
             hsl_colors = list(map(int, request.form['hsl'].split(',')))
-            rgb_colors = get_rgb_colors(hsl_colors)
-            rgb_str = color_array_to_str(rgb_colors)
-        slave.client.root.LEDSTRIP.ColorRgb = rgb_str
+            slave.ledstrip.set_color_hsl(hsl_colors)
         return ''
     elif request.method == 'GET':
         return jsonify({
-            'rgb': color_array_to_str(rgb_colors),
-            'hsl': color_array_to_str(get_hsl_colors(rgb_colors))
+            'rgb': slave.ledstrip.get_color_rgb_str(),
+            'hsl': slave.ledstrip.get_color_hsl_str()
         })
-
-
-def color_array_to_str(array):
-    return '%d,%d,%d' % (array[0], array[1], array[2])
-
-
-def get_hsl_colors(rgb_colors):
-    hls = colorsys.rgb_to_hls(rgb_colors[0] / 255, rgb_colors[1] / 255, rgb_colors[2] / 255)
-    return [hls[0] * 100, hls[2] * 100, hls[1] * 100]
-
-
-def get_rgb_colors(hsl_colors):
-    rgb = colorsys.hls_to_rgb(hsl_colors[0]/ 100, hsl_colors[2] / 100, hsl_colors[1] / 100)
-    return [rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]
 
 
 if __name__ == '__main__':
