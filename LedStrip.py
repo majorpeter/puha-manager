@@ -3,6 +3,8 @@ from datetime import time, datetime, timedelta
 from threading import Thread, Event
 from time import sleep
 
+from Animation import LinearInterpolateAnimation
+
 
 class LedStrip:
     LED_COUNT = 180
@@ -10,20 +12,16 @@ class LedStrip:
     def __init__(self, node):
         self.node = node
         self.rgb_colors = [0, 0, 0]
-        self.animation_from = None
-        self.animation_to = None
-        self.animation_start = None
-        self.animation_end = None
+        self.animation = None
 
         self.update_event = Event()
+
         self.thread = Thread(target=self.thread_function)
         self.thread.start()
 
     def clear_animation(self):
-        self.animation_from = None
-        self.animation_to = None
-        self.animation_start = None
-        self.animation_end = None
+        self.animation = None
+        self.update_event.set()
 
     def set_color_rgb(self, rgb_colors):
         self.clear_animation()
@@ -37,12 +35,8 @@ class LedStrip:
 
     def animate_to_rgb(self, rgb_color, duration_sec):
         self.clear_animation()
-
-        self.animation_start = datetime.now()
-        self.animation_end = self.animation_start + timedelta(seconds=duration_sec)
-        self.animation_from = self.rgb_colors[:]
-        self.animation_to = rgb_color
-
+        self.animation = LinearInterpolateAnimation(LedStrip.LED_COUNT, self.rgb_colors, rgb_color, duration_sec)
+        self.rgb_colors = rgb_color[:]
         self.update_event.set()
 
     def get_color_rgb_str(self):
@@ -54,24 +48,16 @@ class LedStrip:
     def thread_function(self):
         while True:
             self.update_event.wait()
-
-            if self.animation_to:
-                duration = self.animation_end - self.animation_start
-                elapsed = datetime.now() - self.animation_start
-                state = elapsed / duration
-                if state < 1:
-                    self.rgb_colors = [
-                        int(self.animation_from[0] * (1 - state) + self.animation_to[0] * state),
-                        int(self.animation_from[1] * (1 - state) + self.animation_to[1] * state),
-                        int(self.animation_from[2] * (1 - state) + self.animation_to[2] * state)
-                    ]
+            if self.animation:
+                anim_result = self.animation.step()
+                if anim_result:
+                    self.node.ColorBytes = anim_result
                 else:
-                    self.rgb_colors = self.animation_to
-                    self.clear_animation()
+                    self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
                     self.update_event.clear()
             else:
+                self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
                 self.update_event.clear()
-            self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
             sleep(0.010)
 
     @staticmethod
