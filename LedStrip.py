@@ -59,9 +59,9 @@ class LedStrip:
                 state = elapsed / duration
                 if state < 1:
                     self.rgb_colors = [
-                        self.animation_from[0] * (1 - state) + self.animation_to[0] * state,
-                        self.animation_from[1] * (1 - state) + self.animation_to[1] * state,
-                        self.animation_from[2] * (1 - state) + self.animation_to[2] * state
+                        int(self.animation_from[0] * (1 - state) + self.animation_to[0] * state),
+                        int(self.animation_from[1] * (1 - state) + self.animation_to[1] * state),
+                        int(self.animation_from[2] * (1 - state) + self.animation_to[2] * state)
                     ]
                 else:
                     self.rgb_colors = self.animation_to
@@ -79,9 +79,9 @@ class LedStrip:
     @staticmethod
     def convert_rgb_to_hsl(rgb_colors):
         hls = colorsys.rgb_to_hls(rgb_colors[0] / 255, rgb_colors[1] / 255, rgb_colors[2] / 255)
-        return [hls[0] * 100, hls[2] * 100, hls[1] * 100]
+        return [int(hls[0] * 100), int(hls[2] * 100), int(hls[1] * 100)]
 
     @staticmethod
     def convert_hsl_to_rgb(hsl_colors):
         rgb = colorsys.hls_to_rgb(hsl_colors[0] / 100, hsl_colors[2] / 100, hsl_colors[1] / 100)
-        return [rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]
+        return [int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255)]
