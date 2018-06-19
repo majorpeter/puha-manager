@@ -48,14 +48,14 @@ class LedStrip:
     def thread_function(self):
         while True:
             self.update_event.wait()
+            write_current_color_and_clear_evt = True
             if self.animation:
                 anim_result = self.animation.step()
                 if anim_result:
                     self.node.ColorBytes = anim_result
-                else:
-                    self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
-                    self.update_event.clear()
-            else:
+                    write_current_color_and_clear_evt = False
+
+            if write_current_color_and_clear_evt:
                 self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
                 self.update_event.clear()
             sleep(0.010)
