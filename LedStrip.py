@@ -5,6 +5,8 @@ from time import sleep
 
 
 class LedStrip:
+    LED_COUNT = 180
+
     def __init__(self, node):
         self.node = node
         self.rgb_colors = [0, 0, 0]
@@ -69,7 +71,7 @@ class LedStrip:
                     self.update_event.clear()
             else:
                 self.update_event.clear()
-            self.node.ColorRgb = LedStrip.color_array_to_str(self.rgb_colors)
+            self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
             sleep(0.010)
 
     @staticmethod
