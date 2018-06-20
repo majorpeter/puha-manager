@@ -78,10 +78,11 @@ function on_rgb_sliders_changed(is_user_input, animate) {
         relative_brightness = 0;
     }
 
-    $.post('/led', {
-        rgb: get_led_sliders_rgb(),
-        animate: animate
-    });
+    data = {rgb: get_led_sliders_rgb()}
+    if (animate) {
+        data['animate'] = animate
+    }
+    $.post('/led', data);
     update_led_buttons_visibility();
 }
 
