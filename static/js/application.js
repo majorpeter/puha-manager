@@ -5,7 +5,7 @@ relative_brightness = 0;
 
 $(document).ready(function() {
     $('input#led-red, input#led-green, input#led-blue').on('input', function() {
-        on_rgb_sliders_changed(true);
+        on_rgb_sliders_changed(true, false);
     });
     $('input#led-hue, input#led-saturation, input#led-lightness').on('input', function() {
         on_hsl_sliders_changed();
@@ -13,19 +13,19 @@ $(document).ready(function() {
     $('a#led-undo').click(function() {
         $.post('/led', {rgb: undo_rgb, animate: 1.0}, function() {
             undo_rgb = null;
-            setTimeout(update_led_sliders_from_server, 1200);
+            setTimeout(update_led_sliders_from_server, 100);
         })
     });
     $('a#led-on').click(function() {
         $.post('/led', {rgb: '255,255,255', animate: 1.0}, function() {
             undo_rgb = get_led_sliders_rgb();
-            setTimeout(update_led_sliders_from_server, 1200);
+            setTimeout(update_led_sliders_from_server, 100);
         })
     });
     $('a#led-off').click(function() {
         $.post('/led', {rgb: '0,0,0', animate: 1.0}, function() {
             undo_rgb = get_led_sliders_rgb();
-            setTimeout(update_led_sliders_from_server, 1200);
+            setTimeout(update_led_sliders_from_server, 100);
         })
     });
     $('a#led-darker-btn').click(function() {
@@ -66,7 +66,7 @@ function update_led_sliders_from_server() {
     });
 }
 
-function on_rgb_sliders_changed(is_user_input) {
+function on_rgb_sliders_changed(is_user_input, animate) {
     undo_rgb = null;
     if (is_user_input) {
         rgb_values = [
@@ -78,7 +78,10 @@ function on_rgb_sliders_changed(is_user_input) {
         relative_brightness = 0;
     }
 
-    $.post('/led', {rgb: get_led_sliders_rgb()});
+    $.post('/led', {
+        rgb: get_led_sliders_rgb(),
+        animate: animate
+    });
     update_led_buttons_visibility();
 }
 
@@ -113,7 +116,7 @@ function change_brightness(delta) {
     $('input#led-green').val(corrected_rgb_values[1]);
     $('input#led-blue').val(corrected_rgb_values[2]);
 
-    on_rgb_sliders_changed(false);
+    on_rgb_sliders_changed(false, 0.3);
 }
 
 function update_led_buttons_visibility() {
