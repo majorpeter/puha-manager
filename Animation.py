@@ -31,6 +31,6 @@ class LinearInterpolateAnimation(Animation):
                 int(self.animation_from[1] * (1 - state) + self.animation_to[1] * state),
                 int(self.animation_from[2] * (1 - state) + self.animation_to[2] * state)
             ]
-            return ('%02x%02x%02x' % (color[0], color[1], color[2])) * self.led_count
+            return [color] * self.led_count
         else:
             return None

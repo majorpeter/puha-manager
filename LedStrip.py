@@ -52,7 +52,10 @@ class LedStrip:
             if self.animation:
                 anim_result = self.animation.step()
                 if anim_result:
-                    self.node.ColorBytes = anim_result
+                    value_str = ''
+                    for color in anim_result:
+                        value_str += '%02x%02x%02x' % (color[0], color[1], color[2])
+                    self.node.ColorBytes = value_str
                     write_current_color_and_clear_evt = False
 
             if write_current_color_and_clear_evt:
