@@ -154,7 +154,6 @@ var activeLedTab = localStorage.getItem('activeLedTab');
 if (activeLedTab != null) {
     my_tab = $('div#led-tabs a[href="' + activeLedTab + '"]');
     if (!my_tab.hasClass('active')) {
-        console.log('not active');
         $('div#led-tabs a').removeClass('active');
         my_tab.addClass('active');
     }
