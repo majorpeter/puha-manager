@@ -42,12 +42,17 @@ $(document).ready(function() {
     });
 
     $('div#led-tabs a').click(function(e) {
-        localStorage.setItem('activeLedTab', this.getAttribute('href'));
-        update_led_sliders_from_server();
-
-        console.log('clicked' + this.getAttribute('href'));
+        var tab = this.getAttribute('href');
+        localStorage.setItem('activeLedTab', tab);
+        if (tab != '#led-tune-control') {
+            update_led_sliders_from_server();
+        } else {
+            update_light_control_from_server();
+        }
     });
+
     update_led_sliders_from_server();
+    update_light_control_from_server();
 });
 
 function get_led_sliders_rgb() {
@@ -69,6 +74,12 @@ function update_led_sliders_from_server() {
         $('input#led-lightness').val(hsl_values[2]);
 
         update_led_buttons_visibility();
+    });
+}
+
+function update_light_control_from_server() {
+    $.get('/lightcontrol', function(data) {
+        $('input#light-control-enable').prop('checked', data['auto']);
     });
 }
 

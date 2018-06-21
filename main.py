@@ -48,7 +48,11 @@ def light_control():
             slave.light_control.mode = LightControl.Mode.Lightness
         elif request.form['auto'] == 'false':
             slave.light_control.mode = LightControl.Mode.Manual
-    return ''
+        return ''
+    elif request.method == 'GET':
+        return jsonify({
+            'auto': slave.light_control.mode == LightControl.Mode.Lightness
+        })
 
 
 if __name__ == '__main__':
