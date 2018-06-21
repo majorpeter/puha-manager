@@ -1,5 +1,4 @@
 import colorsys
-from datetime import time, datetime, timedelta
 from threading import Thread, Event
 from time import sleep
 
@@ -55,13 +54,19 @@ class LedStrip:
                     value_str = ''
                     for color in anim_result:
                         value_str += '%02x%02x%02x' % (color[0], color[1], color[2])
-                    self.node.ColorBytes = value_str
+                    self.write_color_bytes(value_str)
                     write_current_color_and_clear_evt = False
 
             if write_current_color_and_clear_evt:
-                self.node.ColorBytes = ('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT
+                self.write_color_bytes(('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT)
                 self.update_event.clear()
             sleep(0.010)
+
+    def write_color_bytes(self, bytes_str):
+        try:
+            self.node.ColorBytes = bytes_str
+        except BaseException:
+            print('Error while writing LED strip')
 
     @staticmethod
     def color_array_to_str(array):

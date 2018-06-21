@@ -20,7 +20,10 @@ class LightSensor:
 
     def thread_function(self):
         while True:
-            self.illuminance = float(str(self.node.Illuminance))
-            for listener in self.listeners:
-                listener(self.illuminance)
+            try:
+                self.illuminance = float(str(self.node.Illuminance))
+                for listener in self.listeners:
+                    listener(self.illuminance)
+            except BaseException:
+                print('Error while reading light sensor')
             sleep(0.1)
