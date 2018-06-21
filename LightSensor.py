@@ -23,4 +23,4 @@ class LightSensor:
             self.illuminance = float(str(self.node.Illuminance))
             for listener in self.listeners:
                 listener(self.illuminance)
-            sleep(1)
+            sleep(0.1)
