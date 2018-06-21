@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask.json import jsonify
 
+from LightControl import LightControl
 from Slave import Slave
 
 app = Flask(__name__)
@@ -23,11 +24,14 @@ def ledstrip_control():
         if 'rgb' in request.form:
             rgb_colors = list(map(int, request.form['rgb'].split(',')))
             if 'animate' not in request.form:
+                slave.light_control.mode = LightControl.Mode.Manual
                 slave.ledstrip.set_color_rgb(rgb_colors)
             else:
+                slave.light_control.mode = LightControl.Mode.Manual
                 slave.ledstrip.animate_to_rgb(rgb_colors, float(request.form['animate']))
         elif 'hsl' in request.form:
             hsl_colors = list(map(int, request.form['hsl'].split(',')))
+            slave.light_control.mode = LightControl.Mode.Manual
             slave.ledstrip.set_color_hsl(hsl_colors)
         return ''
     elif request.method == 'GET':

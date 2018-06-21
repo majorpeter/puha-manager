@@ -1,4 +1,11 @@
+from enum import Enum
+
+
 class LightControl:
+    class Mode(Enum):
+        Manual = 0
+        Lightness = 1
+
     def __init__(self, led_strip, light_sensor):
         self.led_strip = led_strip
         self.light_sensor = light_sensor
@@ -7,9 +14,13 @@ class LightControl:
 
         self.hsl_default = [40, 40, 0]
         self.lightness = 0
-        self.target_illuminance = 15
+        self.mode = LightControl.Mode.Lightness #Manual
+        self.target_illuminance = 5
 
     def on_light_measurement_changed(self, measurement):
+        if self.mode == LightControl.Mode.Manual:
+            return
+
         error = self.target_illuminance - measurement
         self.lightness += error * 0.8
         if self.lightness < 0:
