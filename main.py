@@ -41,5 +41,15 @@ def ledstrip_control():
         })
 
 
+@app.route('/lightcontrol', methods=['GET', 'POST'])
+def light_control():
+    if request.method == 'POST':
+        if request.form['auto'] == 'true':
+            slave.light_control.mode = LightControl.Mode.Lightness
+        elif request.form['auto'] == 'false':
+            slave.light_control.mode = LightControl.Mode.Manual
+    return ''
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

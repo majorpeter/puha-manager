@@ -35,6 +35,12 @@ $(document).ready(function() {
         change_brightness(1);
     });
 
+    $('input#light-control-enable').change(function() {
+        $.post('/lightcontrol', {
+            auto: this.checked
+        });
+    });
+
     $('div#led-tabs a').click(function(e) {
         localStorage.setItem('activeLedTab', this.getAttribute('href'));
         update_led_sliders_from_server();

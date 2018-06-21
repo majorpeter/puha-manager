@@ -14,7 +14,7 @@ class LightControl:
 
         self.hsl_default = [40, 40, 0]
         self.lightness = 0
-        self.mode = LightControl.Mode.Lightness #Manual
+        self.mode = LightControl.Mode.Manual
         self.target_illuminance = 5
 
     def on_light_measurement_changed(self, measurement):
