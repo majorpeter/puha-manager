@@ -45,13 +45,13 @@ def ledstrip_control():
 def light_control():
     if request.method == 'POST':
         if request.form['auto'] == 'true':
-            slave.light_control.mode = LightControl.Mode.Lightness
+            slave.light_control.set_mode(LightControl.Mode.Auto)
         elif request.form['auto'] == 'false':
-            slave.light_control.mode = LightControl.Mode.Manual
+            slave.light_control.set_mode(LightControl.Mode.Manual)
         return ''
     elif request.method == 'GET':
         return jsonify({
-            'auto': slave.light_control.mode == LightControl.Mode.Lightness
+            'auto': slave.light_control.mode == LightControl.Mode.Auto
         })
 
 

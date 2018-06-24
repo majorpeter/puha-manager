@@ -41,6 +41,9 @@ class LedStrip:
     def get_color_rgb_str(self):
         return LedStrip.color_array_to_str(self.rgb_colors)
 
+    def get_color_hsl(self):
+        return LedStrip.convert_rgb_to_hsl(self.rgb_colors)
+
     def get_color_hsl_str(self):
         return LedStrip.color_array_to_str(LedStrip.convert_rgb_to_hsl(self.rgb_colors))
 

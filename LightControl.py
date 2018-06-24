@@ -4,7 +4,7 @@ from enum import Enum
 class LightControl:
     class Mode(Enum):
         Manual = 0
-        Lightness = 1
+        Auto = 1
 
     def __init__(self, led_strip, light_sensor):
         self.led_strip = led_strip
@@ -12,10 +12,19 @@ class LightControl:
 
         self.light_sensor.add_listener(self.on_light_measurement_changed)
 
-        self.hsl_default = [40, 40, 0]
+        self.hue = 0
+        self.saturation = 0
         self.lightness = 0
         self.mode = LightControl.Mode.Manual
         self.target_illuminance = 5
+
+    def set_mode(self, mode):
+        if mode == LightControl.Mode.Auto:
+            hsl = self.led_strip.get_color_hsl()
+            self.hue = hsl[0]
+            self.saturation = hsl[1]
+            self.lightness = hsl[2]
+        self.mode = mode
 
     def on_light_measurement_changed(self, measurement):
         if self.mode == LightControl.Mode.Manual:
@@ -29,7 +38,7 @@ class LightControl:
             self.lightness = 100
 
         self.led_strip.set_color_hsl([
-            self.hsl_default[0],
-            self.hsl_default[1],
+            self.hue,
+            self.saturation,
             self.lightness
         ])
