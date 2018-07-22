@@ -7,9 +7,8 @@ class LightControl:
         Manual = 0
         Auto = 1
 
-    TARGET_ILLUMINANCE_NIGHTTIME = 3
-
-    def __init__(self, led_strip, light_sensor, motion_sensor):
+    def __init__(self, config, led_strip, light_sensor, motion_sensor):
+        self.config = config
         self.led_strip = led_strip
         self.light_sensor = light_sensor
         self.motion_sensor = motion_sensor
@@ -20,7 +19,6 @@ class LightControl:
         self.saturation = 0
         self.lightness = 0
         self.mode = LightControl.Mode.Manual
-        self.target_illuminance = LightControl.TARGET_ILLUMINANCE_NIGHTTIME
 
     def set_mode(self, mode):
         if mode == LightControl.Mode.Auto:
@@ -34,12 +32,12 @@ class LightControl:
         if self.mode == LightControl.Mode.Manual:
             return
 
-        if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=60):
-            self.target_illuminance = 0
+        if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=self.config['motion_timeout_sec']):
+            target_illuminance = 0
         else:
-            self.target_illuminance = LightControl.TARGET_ILLUMINANCE_NIGHTTIME
+            target_illuminance = self.config['target_nighttime_illuminance']
 
-        error = self.target_illuminance - measurement
+        error = target_illuminance - measurement
         self.lightness += error * 0.8
         if self.lightness < 0:
             self.lightness = 0

@@ -6,7 +6,7 @@ from mprotocol_client_python.Client import Client
 
 
 class Slave:
-    def __init__(self, ip_address, port):
+    def __init__(self, ip_address, port, config):
         self.client = Client(ip_address, port, timeout=1)
 
         self.ledstrip = None
@@ -22,7 +22,7 @@ class Slave:
                 self.motion_sensor = MotionSensor(self.client.root.MOTION)
 
         if self.ledstrip and self.light_sensor and self.motion_sensor:
-            self.light_control = LightControl(self.ledstrip, self.light_sensor, self.motion_sensor)
+            self.light_control = LightControl(config, self.ledstrip, self.light_sensor, self.motion_sensor)
 
     def get_temperature(self):
         return float(str(self.htu_sensor.Temperature))

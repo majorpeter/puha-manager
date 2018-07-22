@@ -1,3 +1,4 @@
+import json
 import logging
 
 from flask import Flask, render_template, request
@@ -8,7 +9,9 @@ from Slave import Slave
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 app = Flask(__name__)
-slave = Slave('192.168.0.211', 23)
+with open('config.json') as config_file:
+    config = json.load(config_file)
+slave = Slave('192.168.0.211', 23, config)
 
 @app.route('/')
 def index():

@@ -1,0 +1,4 @@
+{
+  "motion_timeout_sec": 15,
+  "target_nighttime_illuminance": 3.0
+}
