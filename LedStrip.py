@@ -1,4 +1,5 @@
 import colorsys
+import logging
 from threading import Thread, Event
 from time import sleep
 
@@ -12,6 +13,7 @@ class LedStrip:
         self.node = node
         self.rgb_colors = [0, 0, 0]
         self.animation = None
+        self.color_bytes_str = ''
 
         self.update_event = Event()
 
@@ -57,19 +59,26 @@ class LedStrip:
                     value_str = ''
                     for color in anim_result:
                         value_str += '%02x%02x%02x' % (color[0], color[1], color[2])
-                    self.write_color_bytes(value_str)
+                    self.update_color_bytes(value_str)
                     write_current_color_and_clear_evt = False
 
             if write_current_color_and_clear_evt:
-                self.write_color_bytes(('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT)
+                self.update_color_bytes(('%02x%02x%02x' % (self.rgb_colors[0], self.rgb_colors[1], self.rgb_colors[2])) * LedStrip.LED_COUNT)
                 self.update_event.clear()
             sleep(0.010)
 
-    def write_color_bytes(self, bytes_str):
+    def update_color_bytes(self, color_bytes_str):
+        """
+        update LED colors on device (if required)
+        :param color_bytes_str: HEX string containing the color of each LED
+        """
+        if self.color_bytes_str == color_bytes_str:
+            return # no need to update
         try:
-            self.node.ColorBytes = bytes_str
+            self.node.ColorBytes = color_bytes_str
+            self.color_bytes_str = color_bytes_str
         except BaseException:
-            print('Error while writing LED strip')
+            logging.error('Writing LED strip failed')
 
     @staticmethod
     def color_array_to_str(array):
