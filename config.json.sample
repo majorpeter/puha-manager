@@ -1,4 +1,10 @@
 {
+  "slaves": [
+    {
+      "ip": "192.168.0.211",
+      "port": 23
+    }
+  ],
   "motion_timeout_sec": 15,
   "target_nighttime_illuminance": 3.0
 }

@@ -11,7 +11,9 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 app = Flask(__name__)
 with open('config.json') as config_file:
     config = json.load(config_file)
-slave = Slave('192.168.0.211', 23, config)
+
+slave_params = config['slaves'][0] #TODO support more slaves!
+slave = Slave(slave_params['ip'], slave_params['port'], config)
 
 @app.route('/')
 def index():
