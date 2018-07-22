@@ -1,12 +1,14 @@
+import logging
+
 from flask import Flask, render_template, request
 from flask.json import jsonify
 
 from LightControl import LightControl
 from Slave import Slave
 
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 app = Flask(__name__)
 slave = Slave('192.168.0.211', 23)
-
 
 @app.route('/')
 def index():
@@ -56,4 +58,4 @@ def light_control():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')
