@@ -21,6 +21,8 @@ def index():
     data.append(('Temperature', slave.get_temperature()))
     data.append(('RH', slave.get_humidity_percentage()))
     data.append(('Light', slave.get_light_lux()))
+    time_delta = slave.motion_sensor.get_time_since_last_movement()
+    data.append(('Last movement', '%d sec ago' % time_delta.seconds))
 
     return render_template('index.html', data=data)
 
