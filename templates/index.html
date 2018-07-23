@@ -96,21 +96,24 @@
                                 </tbody></table>
                             </div>
                             <div id="led-tune-control">
-                                  <div class="switch">
-                                    <label>
-                                      <input id="light-control-enable" type="checkbox">
-                                      <span class="lever"></span>
-                                      Automatically enable LED's in the dark
+                                <p>
+                                    <label title="Do not control lights automatically.">
+                                        <input name="led-control-mode" type="radio" value="Manual"/>
+                                        <span>Manual</span>
                                     </label>
-                                  </div>
-                                  <br/>
-                                  <div class="switch">
-                                    <label>
-                                      <input disabled type="checkbox" checked>
-                                      <span class="lever"></span>
-                                      Only when movement is detected
+                                </p>
+                                <p>
+                                    <label title="Enable lights for a short time when movement is detected.">
+                                        <input name="led-control-mode" type="radio" value="NightTime"/>
+                                        <span>Night-time</span>
                                     </label>
-                                  </div>
+                                </p>
+                                <p>
+                                    <label title="Keep current level of measured light (increase/decrease lightness as the environment changes).">
+                                        <input name="led-control-mode" type="radio" value="KeepIlluminance"/>
+                                        <span>Keep illuminance</span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
                         <div class="card-action">

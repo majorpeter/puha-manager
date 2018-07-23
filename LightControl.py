@@ -5,7 +5,8 @@ from enum import Enum
 class LightControl:
     class Mode(Enum):
         Manual = 0
-        Auto = 1
+        NightTime = 1
+        KeepIlluminance = 2
 
     def __init__(self, config, led_strip, light_sensor, motion_sensor):
         self.config = config
@@ -17,16 +18,18 @@ class LightControl:
 
         self.hue = 0
         self.saturation = 0
+        self.initial_illuminance = 0
         self.integrator = 0
         self.mode = LightControl.Mode.Manual
 
     def set_mode(self, mode):
-        if mode == LightControl.Mode.Auto:
+        if mode in [LightControl.Mode.NightTime, LightControl.Mode.KeepIlluminance]:
             hsl = self.led_strip.get_color_hsl()
             self.hue = hsl[0]
             self.saturation = hsl[1]
-            self.integrator = hsl[2]
+            self.integrator = hsl[2] #TODO calculate actual value
         self.mode = mode
+        self.initial_illuminance = self.light_sensor.illuminance
 
     def on_light_measurement_changed(self, measurement):
         """
@@ -39,12 +42,15 @@ class LightControl:
           1/T_t -> 'light_control_anti_windup_time'
         """
         if self.mode == LightControl.Mode.Manual:
+            # no need for control
             return
-
-        if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=self.config['motion_timeout_sec']):
-            target_illuminance = 0
-        else:
-            target_illuminance = self.config['target_nighttime_illuminance']
+        elif self.mode == LightControl.Mode.NightTime:
+            if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=self.config['motion_timeout_sec']):
+                target_illuminance = 0
+            else:
+                target_illuminance = self.config['target_nighttime_illuminance']
+        else: # KeepIlluminance
+            target_illuminance = self.initial_illuminance
 
         error = target_illuminance - measurement
         # since the measurement is quantized, the error can never reach zero

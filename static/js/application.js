@@ -35,9 +35,9 @@ $(document).ready(function() {
         change_brightness(1);
     });
 
-    $('input#light-control-enable').change(function() {
+    $('input[name="led-control-mode"]').change(function() {
         $.post('/lightcontrol', {
-            auto: this.checked
+            mode: this.value
         });
     });
 
@@ -79,7 +79,7 @@ function update_led_sliders_from_server() {
 
 function update_light_control_from_server() {
     $.get('/lightcontrol', function(data) {
-        $('input#light-control-enable').prop('checked', data['auto']);
+        $('input[name="led-control-mode"][value="' + data['mode'].split('.')[1] + '"]').prop('checked', true);
     });
 }
 
