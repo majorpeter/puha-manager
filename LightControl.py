@@ -38,6 +38,8 @@ class LightControl:
             target_illuminance = self.config['target_nighttime_illuminance']
 
         error = target_illuminance - measurement
+        if abs(error) < self.config['light_sensor_quatization_error']:
+            return
         self.lightness += error * 0.8
         if self.lightness < 0:
             self.lightness = 0
