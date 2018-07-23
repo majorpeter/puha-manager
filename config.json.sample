@@ -7,5 +7,6 @@
   ],
   "motion_timeout_sec": 15,
   "target_nighttime_illuminance": 3.0,
-  "light_sensor_quatization_error": 0.5
+  "light_sensor_quantization_error": 0.5,
+  "light_control_k_i": 0.8
 }

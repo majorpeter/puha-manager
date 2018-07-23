@@ -17,7 +17,7 @@ class LightControl:
 
         self.hue = 0
         self.saturation = 0
-        self.lightness = 0
+        self.integrator = 0
         self.mode = LightControl.Mode.Manual
 
     def set_mode(self, mode):
@@ -25,7 +25,7 @@ class LightControl:
             hsl = self.led_strip.get_color_hsl()
             self.hue = hsl[0]
             self.saturation = hsl[1]
-            self.lightness = hsl[2]
+            self.integrator = hsl[2]
         self.mode = mode
 
     def on_light_measurement_changed(self, measurement):
@@ -38,16 +38,18 @@ class LightControl:
             target_illuminance = self.config['target_nighttime_illuminance']
 
         error = target_illuminance - measurement
-        if abs(error) < self.config['light_sensor_quatization_error']:
+        if abs(error) < self.config['light_sensor_quantization_error']:
             return
-        self.lightness += error * 0.8
-        if self.lightness < 0:
-            self.lightness = 0
-        elif self.lightness > 100:
-            self.lightness = 100
+        self.integrator += error * self.config['light_control_k_i']
+
+        # limit range of integrator into the range of lightness (0-100)
+        if self.integrator < 0:
+            self.integrator = 0
+        elif self.integrator > 100:
+            self.integrator = 100
 
         self.led_strip.set_color_hsl([
             self.hue,
             self.saturation,
-            self.lightness
+            self.integrator
         ])
