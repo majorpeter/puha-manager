@@ -1,5 +1,7 @@
 from datetime import timedelta
 from enum import Enum
+from threading import Thread
+from time import sleep
 
 
 class LightControl:
@@ -8,19 +10,22 @@ class LightControl:
         NightTime = 1
         KeepIlluminance = 2
 
+    CONTROL_LOOP_FREQUENCY_HZ = 30
+
     def __init__(self, config, led_strip, light_sensor, motion_sensor):
         self.config = config
         self.led_strip = led_strip
         self.light_sensor = light_sensor
         self.motion_sensor = motion_sensor
 
-        self.light_sensor.add_listener(self.on_light_measurement_changed)
-
         self.hue = 0
         self.saturation = 0
         self.initial_illuminance = 0
         self.integrator = 0
         self.mode = LightControl.Mode.Manual
+
+        self.control_loop_thread = Thread(target=self.control_loop_thread_func)
+        self.control_loop_thread.start()
 
     def set_mode(self, mode):
         if mode in [LightControl.Mode.NightTime, LightControl.Mode.KeepIlluminance]:
@@ -31,48 +36,51 @@ class LightControl:
         self.mode = mode
         self.initial_illuminance = self.light_sensor.illuminance
 
-    def on_light_measurement_changed(self, measurement):
+    def control_loop_thread_func(self):
         """
         updates light control according to configuration
-        :param measurement: light measurement value (in lx)
         Integrator anti-windup solution based on http://cse.lab.imtlucca.it/~bemporad/teaching/ac/pdf/AC2-09-AntiWindup.pdf
           e -> error
           K_p -> 'light_control_k_p'
           K_p/T_i -> 'light_control_k_i'
           1/T_t -> 'light_control_anti_windup_time'
         """
-        if self.mode == LightControl.Mode.Manual:
-            # no need for control
-            return
-        elif self.mode == LightControl.Mode.NightTime:
-            if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=self.config['motion_timeout_sec']):
-                target_illuminance = 0
-            else:
-                target_illuminance = self.config['target_nighttime_illuminance']
-        else: # KeepIlluminance
-            target_illuminance = self.initial_illuminance
+        while True:
+            if self.mode == LightControl.Mode.Manual:
+                # no need for control
+                sleep(1) #TODO event instead?
+                continue
+            elif self.mode == LightControl.Mode.NightTime:
+                if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=self.config['motion_timeout_sec']):
+                    target_illuminance = 0
+                else:
+                    target_illuminance = self.config['target_nighttime_illuminance']
+            else: # KeepIlluminance
+                target_illuminance = self.initial_illuminance
 
-        error = target_illuminance - measurement
-        # since the measurement is quantized, the error can never reach zero
-        if abs(error) < self.config['light_sensor_quantization_error']:
-            error = 0
+            error = target_illuminance - self.light_sensor.illuminance
+            # since the measurement is quantized, the error can never reach zero
+            if abs(error) < self.config['light_sensor_quantization_error']:
+                error = 0
 
-        # update integrator
-        self.integrator += error * self.config['light_control_k_i']
+            # update integrator
+            self.integrator += error * self.config['light_control_k_i']
 
-        # output value (v)
-        lightness = self.config['light_control_k_p'] * error + self.integrator
+            # output value (v)
+            lightness = self.config['light_control_k_p'] * error + self.integrator
 
-        # saturate output signal (u) into the range of lightness (0-100); handle integrator wind-up
-        if lightness < 0:
-            self.integrator += self.config['light_control_anti_windup_time'] * (0 - lightness)
-            lightness = 0
-        elif lightness > 100:
-            self.integrator += self.config['light_control_anti_windup_time'] * (100 - lightness)
-            lightness = 100
+            # saturate output signal (u) into the range of lightness (0-100); handle integrator wind-up
+            if lightness < 0:
+                self.integrator += self.config['light_control_anti_windup_time'] * (0 - lightness)
+                lightness = 0
+            elif lightness > 100:
+                self.integrator += self.config['light_control_anti_windup_time'] * (100 - lightness)
+                lightness = 100
 
-        self.led_strip.set_color_hsl([
-            self.hue,
-            self.saturation,
-            lightness
-        ])
+            self.led_strip.set_color_hsl([
+                self.hue,
+                self.saturation,
+                lightness
+            ])
+
+            sleep(1 / LightControl.CONTROL_LOOP_FREQUENCY_HZ)
