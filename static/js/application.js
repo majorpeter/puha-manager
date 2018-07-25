@@ -39,6 +39,11 @@ $(document).ready(function() {
         $.post('/lightcontrol', {
             mode: this.value
         });
+        if (this.value == 'KeepIlluminance') {
+            $('input#kept-illuminance').removeClass('hide');
+        } else {
+            $('input#kept-illuminance').addClass('hide');
+        }
     });
 
     $('div#led-tabs a').click(function(e) {
