@@ -40,9 +40,21 @@ $(document).ready(function() {
             mode: this.value
         });
         if (this.value == 'KeepIlluminance') {
-            $('input#kept-illuminance').removeClass('hide');
+            $.get('/lightsensor', function(data) {
+                $('input#kept-illuminance').val(data['illuminance']);
+                $('input#kept-illuminance').removeClass('hide');
+            });
         } else {
             $('input#kept-illuminance').addClass('hide');
+        }
+    });
+
+    $('input#kept-illuminance').on('input', function() {
+        if ($('input[name="led-control-mode"]:checked').val() == 'KeepIlluminance') {
+                $.post('/lightcontrol', {
+                    mode: 'KeepIlluminance',
+                    illuminance: this.value
+                });
         }
     });
 

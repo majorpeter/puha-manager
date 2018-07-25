@@ -27,14 +27,18 @@ class LightControl:
         self.control_loop_thread = Thread(target=self.control_loop_thread_func)
         self.control_loop_thread.start()
 
-    def set_mode(self, mode):
+    def set_mode(self, mode, illuminance=None):
         if mode in [LightControl.Mode.NightTime, LightControl.Mode.KeepIlluminance]:
             hsl = self.led_strip.get_color_hsl()
             self.hue = hsl[0]
             self.saturation = hsl[1]
             self.integrator = hsl[2] #TODO calculate actual value
         self.mode = mode
-        self.initial_illuminance = self.light_sensor.illuminance
+
+        if illuminance == None:
+            self.initial_illuminance = self.light_sensor.illuminance
+        else:
+            self.initial_illuminance = illuminance
 
     def control_loop_thread_func(self):
         """

@@ -53,12 +53,22 @@ def ledstrip_control():
 @app.route('/lightcontrol', methods=['GET', 'POST'])
 def light_control():
     if request.method == 'POST':
-        slave.light_control.set_mode(LightControl.Mode[request.form['mode']])
+        illuminance = None
+        if 'illuminance' in request.form:
+            illuminance = float(request.form['illuminance'])
+        slave.light_control.set_mode(LightControl.Mode[request.form['mode']], illuminance)
         return ''
     elif request.method == 'GET':
         return jsonify({
             'mode': str(slave.light_control.mode)
         })
+
+
+@app.route('/lightsensor', methods=['GET'])
+def light_sensor():
+    return jsonify({
+        'illuminance': slave.light_sensor.illuminance
+    })
 
 
 if __name__ == '__main__':
