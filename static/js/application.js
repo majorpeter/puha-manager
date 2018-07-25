@@ -39,14 +39,7 @@ $(document).ready(function() {
         $.post('/lightcontrol', {
             mode: this.value
         });
-        if (this.value == 'KeepIlluminance') {
-            $.get('/lightsensor', function(data) {
-                $('input#kept-illuminance').val(data['illuminance']);
-                $('input#kept-illuminance').removeClass('hide');
-            });
-        } else {
-            $('input#kept-illuminance').addClass('hide');
-        }
+        update_kept_illuminance_visiblity_and_value_from_server();
     });
 
     $('input#kept-illuminance').on('input', function() {
@@ -97,7 +90,19 @@ function update_led_sliders_from_server() {
 function update_light_control_from_server() {
     $.get('/lightcontrol', function(data) {
         $('input[name="led-control-mode"][value="' + data['mode'].split('.')[1] + '"]').prop('checked', true);
+        update_kept_illuminance_visiblity_and_value_from_server();
     });
+}
+
+function update_kept_illuminance_visiblity_and_value_from_server() {
+    if ($('input[name="led-control-mode"]:checked').val() == 'KeepIlluminance') {
+        $.get('/lightsensor', function(data) {
+            $('input#kept-illuminance').val(data['illuminance']);
+            $('input#kept-illuminance').removeClass('hide');
+        });
+    } else {
+        $('input#kept-illuminance').addClass('hide');
+    }
 }
 
 function on_rgb_sliders_changed(is_user_input, animate) {
