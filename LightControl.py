@@ -28,7 +28,7 @@ class LightControl:
         self.control_loop_thread.start()
 
     def set_mode(self, mode, illuminance=None):
-        if mode in [LightControl.Mode.NightTime, LightControl.Mode.KeepIlluminance]:
+        if mode in [LightControl.Mode.NightTime, LightControl.Mode.KeepIlluminance] and mode != self.mode:
             hsl = self.led_strip.get_color_hsl()
             self.hue = hsl[0]
             self.saturation = hsl[1]
