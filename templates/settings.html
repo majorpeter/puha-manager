@@ -1,2 +1,55 @@
 {% include "header.html" %}
+<main>
+    <div class="container">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Settings</span>
+                <form>
+                    <div class="row">
+                        <div class="input-field">
+                            <input name="motion_timeout_sec" id="motion_timeout_sec" type="text" value="{{config['motion_timeout_sec']}}">
+                            <label for="motion_timeout_sec" class="active">Motion timeout (sec)</label>
+                            <span class="helper-text">How long do the lights stay on after movement is detected in night-time mode (in seconds.)</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
+                            <input name="target_nighttime_illuminance" id="target_nighttime_illuminance" type="text" value="{{config['target_nighttime_illuminance']}}">
+                            <label for="target_nighttime_illuminance" class="active">Target night-time illuminance (lx)</label>
+                            <span class="helper-text">How bright to make the room in night-time mode.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
+                            <input name="light_sensor_quantization_error" id="light_sensor_quantization_error" type="text" value="{{config['light_sensor_quantization_error']}}">
+                            <label for="light_sensor_quantization_error" class="active">Light sensor quantization error (lx)</label>
+                            <span class="helper-text">Errors below this value can be ignorded when light control is active.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
+                            <input name="light_control_k_p" id="light_control_k_p" type="text" value="{{config['light_control_k_p']}}">
+                            <label for="light_control_k_p" class="active">Light Control P coefficient</label>
+                            <span class="helper-text">P coefficient of the PI controller.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
+                            <input name="light_control_k_i" id="light_control_k_i" type="text" value="{{config['light_control_k_i']}}">
+                            <label for="light_control_k_i" class="active">Light Control I coefficient</label>
+                            <span class="helper-text">I coefficient of the PI controller.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
+                            <input name="light_control_anti_windup_time" id="light_control_anti_windup_time" type="text" value="{{config['light_control_anti_windup_time']}}">
+                            <label for="light_control_anti_windup_time" class="active">Light Control integrator anti-windup time</label>
+                            <span class="helper-text">Defines how strictly anti-windup is controlled.</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
 {% include "footer.html" %}
