@@ -71,5 +71,10 @@ def light_sensor():
     })
 
 
+@app.route('/settings', methods=['GET', 'POST'])
+def settings_page():
+    return render_template('settings.html')
+
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
