@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title">Settings</span>
-                <form>
+                <form method="post">
                     <div class="row">
                         <div class="input-field">
                             <input name="motion_timeout_sec" id="motion_timeout_sec" type="text" value="{{config['motion_timeout_sec']}}">
@@ -47,6 +47,20 @@
                             <span class="helper-text">Defines how strictly anti-windup is controlled.</span>
                         </div>
                     </div>
+                    <p class="center">
+                        <button class="btn waves-effect waves-light" type="submit" name="apply">
+                            Apply changes
+                            <i class="material-icons left">check</i>
+                        </button>
+                        <button class="btn waves-effect waves-light" type="submit" name="save">
+                            Save current config
+                            <i class="material-icons left">save</i>
+                        </button>
+                        <button class="btn waves-effect waves-light" type="submit" name="revert">
+                            Reload saved config
+                            <i class="material-icons left">undo</i>
+                        </button>
+                    </p>
                 </form>
             </div>
         </div>

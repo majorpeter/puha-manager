@@ -73,6 +73,16 @@ def light_sensor():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_page():
+    if request.method == 'POST':
+        if 'apply' in request.form:
+            try:
+                config['motion_timeout_sec'] = float(request.form['motion_timeout_sec'])
+                config['target_nighttime_illuminance'] = float(request.form['target_nighttime_illuminance'])
+                config['light_sensor_quantization_error'] = float(request.form['light_sensor_quantization_error'])
+                config['light_control_k_p'] = float(request.form['light_control_k_p'])
+                config['light_control_k_i'] = float(request.form['light_control_k_i'])
+            except ValueError:
+                pass #TODO show error message
     return render_template('settings.html', config=config)
 
 
