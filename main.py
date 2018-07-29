@@ -84,6 +84,10 @@ def settings_page():
                 config['light_control_k_i'] = float(request.form['light_control_k_i'])
             except ValueError as error:
                 setting_error = str(error)
+        elif 'save' in request.form:
+            with open('config.json', 'w') as config_file:
+                json.dump(config, config_file, indent=4)
+
     return render_template('settings.html', config=config, setting_error=setting_error)
 
 
