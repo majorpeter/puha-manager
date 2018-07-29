@@ -73,6 +73,7 @@ def light_sensor():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_page():
+    setting_error = None
     if request.method == 'POST':
         if 'apply' in request.form:
             try:
@@ -81,9 +82,9 @@ def settings_page():
                 config['light_sensor_quantization_error'] = float(request.form['light_sensor_quantization_error'])
                 config['light_control_k_p'] = float(request.form['light_control_k_p'])
                 config['light_control_k_i'] = float(request.form['light_control_k_i'])
-            except ValueError:
-                pass #TODO show error message
-    return render_template('settings.html', config=config)
+            except ValueError as error:
+                setting_error = str(error)
+    return render_template('settings.html', config=config, setting_error=setting_error)
 
 
 if __name__ == '__main__':

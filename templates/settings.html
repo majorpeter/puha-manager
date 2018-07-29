@@ -4,6 +4,12 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title">Settings</span>
+                {% if setting_error %}
+                <blockquote style="border-left-color: red;">
+                    <p>Error!</p>
+                    <p>{{setting_error}}</p>
+                </blockquote>
+                {% endif %}
                 <form method="post">
                     <div class="row">
                         <div class="input-field">
