@@ -1,4 +1,5 @@
 from datetime import datetime
+from threading import Lock
 
 
 class LoggedSensor:
@@ -10,24 +11,31 @@ class LoggedSensor:
         self.data = []
         self.max_measurements = max_measurements
         self.holdoff_time = holdoff_time
+        self.lock = Lock()
 
     def add_measurement(self, measurement):
         now = datetime.now()
-        if self.holdoff_time is not None:
-            if len(self.data) > 0:
-                diff = now - self.data[-1]['time']
-                if diff < self.holdoff_time:
-                    return
 
-        if len(self.data) > self.max_measurements:
-            del self.data[0]
+        with self.lock:
+            if self.holdoff_time is not None:
+                if len(self.data) > 0:
+                    diff = now - self.data[-1]['time']
+                    if diff < self.holdoff_time:
+                        return
 
-        self.data.append({'time': now, 'measurement': measurement})
+            if len(self.data) > self.max_measurements:
+                del self.data[0]
+
+            self.data.append({'time': now, 'measurement': measurement})
 
     def get_chart_data(self):
         label = []
         data = []
-        for item in self.data:
-            label.append('\'' + item['time'].strftime('%H:%M:%S') + '\'')
-            data.append('%.2f' % item['measurement'])
-        return label, data
+
+        with self.lock:
+            for item in self.data:
+                label.append('\'' + item['time'].strftime('%H:%M:%S') + '\'')
+                data.append('%.2f' % item['measurement'])
+            last_timestamp = int(self.data[-1]['time'].timestamp())
+
+        return label, data, last_timestamp
