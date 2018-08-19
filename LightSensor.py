@@ -1,5 +1,12 @@
-class LightSensor:
+from datetime import timedelta
+
+from LoggedSensor import LoggedSensor
+
+
+class LightSensor(LoggedSensor):
     def __init__(self, node):
+        super(LightSensor, self).__init__(holdoff_time=timedelta(seconds=10))
+
         self.node = node
         self.illuminance = 0
         self.listeners = []
@@ -15,5 +22,7 @@ class LightSensor:
 
     def on_property_changed(self, name, value):
         self.illuminance = float(value)
+        self.add_measurement(self.illuminance)
+
         for listener in self.listeners:
             listener(self.illuminance)

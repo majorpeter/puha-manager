@@ -73,16 +73,11 @@ def light_sensor():
 
 @app.route('/chart', methods=['GET'])
 def chart():
-    chart_data = {
-        '1': '2',
-        '2': '1',
-        '3': '7',
-        '4': '6'
-    }
+    label, data = slave.light_sensor.get_chart_data()
 
-    chart_labels_json = '[' + (','.join(chart_data.keys())) + ']'
-    chart_data_json = '[' + (','.join(chart_data.values())) + ']'
-    return render_template('chart.html', chart_labels_json=chart_labels_json, chart_data_json=chart_data_json)
+    return render_template('chart.html',
+            chart_labels_json=('[' + (','.join(label)) + ']'),
+            chart_data_json=('[' + (','.join(data)) + ']'))
 
 
 @app.route('/settings', methods=['GET', 'POST'])

@@ -23,7 +23,7 @@ var ctx = document.getElementById("chart").getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: {{ chart_labels_json }},
+        labels: {{ chart_labels_json|safe }},
         datasets: [{
             data: {{ chart_data_json }},
         }]
