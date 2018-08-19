@@ -2,6 +2,7 @@ from LedStrip import LedStrip
 from LightControl import LightControl
 from LightSensor import LightSensor
 from MotionSensor import MotionSensor
+from TemperatureSensor import TemperatureSensor
 from mprotocol_client_python.Client import Client
 
 
@@ -15,7 +16,7 @@ class Slave:
             if node.get_name() == 'LEDSTRIP':
                 self.ledstrip = LedStrip(node)
             elif node.get_name() == 'HTU':
-                self.htu_sensor = self.client.root.HTU
+                self.temperature_sensor = TemperatureSensor(node)
             elif node.get_name() == 'LIGHT':
                 self.light_sensor = LightSensor(self.client.root.LIGHT)
             elif node.get_name() == 'MOTION':
@@ -23,9 +24,6 @@ class Slave:
 
         if self.ledstrip and self.light_sensor and self.motion_sensor:
             self.light_control = LightControl(config, self.ledstrip, self.light_sensor, self.motion_sensor)
-
-    def get_temperature(self):
-        return float(str(self.htu_sensor.Temperature))
 
     def get_humidity_percentage(self):
         return float(str(self.htu_sensor.Humidity))

@@ -18,9 +18,6 @@ slave = Slave(slave_params['ip'], slave_params['port'], config)
 @app.route('/')
 def index():
     data = []
-    data.append(('Temperature', slave.get_temperature()))
-    data.append(('RH', slave.get_humidity_percentage()))
-    data.append(('Light', slave.get_light_lux()))
     time_delta = slave.motion_sensor.get_time_since_last_movement()
     data.append(('Last movement', '%d sec ago' % time_delta.seconds))
 
@@ -99,6 +96,11 @@ def chart(sensor, title=None, y_label=None, dataset_color=None):
 @app.route('/illuminance', methods=['GET', 'POST'])
 def illuminance_chart():
     return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)', dataset_color=[75, 192, 192])
+
+
+@app.route('/temperature', methods=['GET', 'POST'])
+def temperature_chart():
+    return chart(slave.temperature_sensor, title='Temperature', y_label='Temperature (C)', dataset_color=[75, 192, 192])
 
 
 @app.route('/settings', methods=['GET', 'POST'])
