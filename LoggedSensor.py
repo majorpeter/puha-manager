@@ -35,7 +35,7 @@ class LoggedSensor:
         with self.lock:
             for item in self.data:
                 if item['time'].timestamp() > from_timestamp:
-                    label.append('\'' + item['time'].strftime('%H:%M:%S') + '\'')
+                    label.append(item['time'].strftime('%H:%M:%S'))
                     data.append('%.2f' % item['measurement'])
             last_timestamp = int(self.data[-1]['time'].timestamp())
 
