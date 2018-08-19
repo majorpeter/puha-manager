@@ -33,7 +33,17 @@ var config = {
     options: {
         legend: {
             display: false
-        }
+        },
+        scales: {
+        {% if y_scale_label %}
+           yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: '{{ y_scale_label }}'
+                }
+            }],
+        {% endif %}
+        },
     }
 };
 var myChart = new Chart(ctx, config);

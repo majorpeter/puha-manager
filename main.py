@@ -80,6 +80,7 @@ def chart():
 
     if request.method == 'GET':
         return render_template('chart.html',
+                y_scale_label='Illuminance (lx)',
                 chart_labels_json=('["' + ('","'.join(label)) + '"]'),
                 chart_data_json=('[' + (','.join(data)) + ']'),
                 chart_last_timestamp=last_timestamp)
