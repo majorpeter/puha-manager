@@ -24,7 +24,7 @@ class LightControl:
         self.integrator = 0
         self.mode = LightControl.Mode.Manual
 
-        self.control_loop_thread = Thread(target=self.control_loop_thread_func)
+        self.control_loop_thread = Thread(target=self.control_loop_thread_func, daemon=True)
         self.control_loop_thread.start()
 
     def set_mode(self, mode, illuminance=None):
