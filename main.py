@@ -71,7 +71,7 @@ def light_sensor():
     })
 
 
-def chart(sensor, title=None, y_label=None):
+def chart(sensor, title=None, y_label=None, dataset_color=None):
     last_timestamp = 0
     if request.method == 'POST' and 'last_timestamp' in request.form:
         last_timestamp = int(request.form['last_timestamp'])
@@ -81,6 +81,8 @@ def chart(sensor, title=None, y_label=None):
         return render_template('chart.html',
                 chart_title=title,
                 y_scale_label=y_label,
+                dataset_color='rgba({0},{1},{2},0.5)'.format(*dataset_color),
+                dataset_border_color='rgb({0},{1},{2})'.format(*dataset_color),
                 refresh_period_ms=int(sensor.holdoff_time.total_seconds() / 2 * 1000),
                 chart_width='700px',
                 chart_labels_json=('["' + ('","'.join(label)) + '"]'),
@@ -96,7 +98,7 @@ def chart(sensor, title=None, y_label=None):
 
 @app.route('/illuminance', methods=['GET', 'POST'])
 def illuminance_chart():
-    return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)')
+    return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)', dataset_color=[75, 192, 192])
 
 
 @app.route('/settings', methods=['GET', 'POST'])

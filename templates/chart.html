@@ -27,6 +27,13 @@ var config = {
     data: {
         labels: {{ chart_labels_json|safe }},
         datasets: [{
+        {% if dataset_color %}
+            backgroundColor: '{{ dataset_color }}',
+        {% endif %}
+        {% if dataset_border_color %}
+            borderColor: '{{ dataset_border_color }}',
+            borderWidth: 1,
+        {% endif %}
             data: {{ chart_data_json }},
         }]
     },
