@@ -49,7 +49,7 @@ var config = {
 var myChart = new Chart(ctx, config);
 
 function append_new_chart_data() {
-    $.post('/chart', {last_timestamp: chart_last_timestamp}, function(data) {
+    $.post('', {last_timestamp: chart_last_timestamp}, function(data) {
         for (key in data['data']) {
             config.data.labels.push(data['label'][key]);
             config.data.datasets[0].data.push(data['data'][key]);

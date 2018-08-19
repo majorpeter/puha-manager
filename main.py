@@ -71,17 +71,17 @@ def light_sensor():
     })
 
 
-@app.route('/chart', methods=['GET', 'POST'])
-def chart():
+def chart(sensor, title=None, y_label=None):
     last_timestamp = 0
     if request.method == 'POST' and 'last_timestamp' in request.form:
         last_timestamp = int(request.form['last_timestamp'])
-    label, data, last_timestamp = slave.light_sensor.get_chart_data(from_timestamp=last_timestamp + 1)
+    label, data, last_timestamp = sensor.get_chart_data(from_timestamp=last_timestamp + 1)
 
     if request.method == 'GET':
         return render_template('chart.html',
-                y_scale_label='Illuminance (lx)',
-                refresh_period_ms=int(slave.light_sensor.holdoff_time.total_seconds() / 2 * 1000),
+                chart_title=title,
+                y_scale_label=y_label,
+                refresh_period_ms=int(sensor.holdoff_time.total_seconds() / 2 * 1000),
                 chart_width='700px',
                 chart_labels_json=('["' + ('","'.join(label)) + '"]'),
                 chart_data_json=('[' + (','.join(data)) + ']'),
@@ -92,6 +92,11 @@ def chart():
             'data': data,
             'last_timestamp': last_timestamp
         })
+
+
+@app.route('/illuminance', methods=['GET', 'POST'])
+def illuminance_chart():
+    return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)')
 
 
 @app.route('/settings', methods=['GET', 'POST'])
