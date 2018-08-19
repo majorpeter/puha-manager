@@ -71,6 +71,20 @@ def light_sensor():
     })
 
 
+@app.route('/chart', methods=['GET'])
+def chart():
+    chart_data = {
+        '1': '2',
+        '2': '1',
+        '3': '7',
+        '4': '6'
+    }
+
+    chart_labels_json = '[' + (','.join(chart_data.keys())) + ']'
+    chart_data_json = '[' + (','.join(chart_data.values())) + ']'
+    return render_template('chart.html', chart_labels_json=chart_labels_json, chart_data_json=chart_data_json)
+
+
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_page():
     setting_error = None
@@ -92,4 +106,4 @@ def settings_page():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
