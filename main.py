@@ -103,6 +103,11 @@ def temperature_chart():
     return chart(slave.temperature_sensor, title='Temperature', y_label='Temperature (C)', dataset_color=[75, 192, 192])
 
 
+@app.route('/humidity', methods=['GET', 'POST'])
+def humidity_chart():
+    return chart(slave.humidity_sensor, title='Relative Humidity', y_label='R/H (%)', dataset_color=[75, 192, 192])
+
+
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_page():
     setting_error = None

@@ -1,3 +1,4 @@
+from HumiditySensor import HumiditySensor
 from LedStrip import LedStrip
 from LightControl import LightControl
 from LightSensor import LightSensor
@@ -17,6 +18,7 @@ class Slave:
                 self.ledstrip = LedStrip(node)
             elif node.get_name() == 'HTU':
                 self.temperature_sensor = TemperatureSensor(node)
+                self.humidity_sensor = HumiditySensor(node)
             elif node.get_name() == 'LIGHT':
                 self.light_sensor = LightSensor(self.client.root.LIGHT)
             elif node.get_name() == 'MOTION':
@@ -24,9 +26,3 @@ class Slave:
 
         if self.ledstrip and self.light_sensor and self.motion_sensor:
             self.light_control = LightControl(config, self.ledstrip, self.light_sensor, self.motion_sensor)
-
-    def get_humidity_percentage(self):
-        return float(str(self.htu_sensor.Humidity))
-
-    def get_light_lux(self):
-        return float(self.light_sensor.illuminance)
