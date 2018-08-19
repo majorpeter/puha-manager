@@ -59,6 +59,6 @@ function append_new_chart_data() {
     });
 };
 
-setInterval(append_new_chart_data, 3000);
+setInterval(append_new_chart_data, {{ refresh_period_ms | default('3000') }});
 </script>
 {% include "footer.html" %}

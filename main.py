@@ -81,6 +81,7 @@ def chart():
     if request.method == 'GET':
         return render_template('chart.html',
                 y_scale_label='Illuminance (lx)',
+                refresh_period_ms=int(slave.light_sensor.holdoff_time.total_seconds() / 2 * 1000),
                 chart_labels_json=('["' + ('","'.join(label)) + '"]'),
                 chart_data_json=('[' + (','.join(data)) + ']'),
                 chart_last_timestamp=last_timestamp)
