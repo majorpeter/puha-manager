@@ -28,14 +28,15 @@ class LoggedSensor:
 
             self.data.append({'time': now, 'measurement': measurement})
 
-    def get_chart_data(self):
+    def get_chart_data(self, from_timestamp=0):
         label = []
         data = []
 
         with self.lock:
             for item in self.data:
-                label.append('\'' + item['time'].strftime('%H:%M:%S') + '\'')
-                data.append('%.2f' % item['measurement'])
+                if item['time'].timestamp() > from_timestamp:
+                    label.append('\'' + item['time'].strftime('%H:%M:%S') + '\'')
+                    data.append('%.2f' % item['measurement'])
             last_timestamp = int(self.data[-1]['time'].timestamp())
 
         return label, data, last_timestamp

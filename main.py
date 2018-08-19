@@ -71,14 +71,24 @@ def light_sensor():
     })
 
 
-@app.route('/chart', methods=['GET'])
+@app.route('/chart', methods=['GET', 'POST'])
 def chart():
-    label, data, last_timestamp = slave.light_sensor.get_chart_data()
+    last_timestamp = 0
+    if request.method == 'POST' and 'last_timestamp' in request.form:
+        last_timestamp = int(request.form['last_timestamp'])
+    label, data, last_timestamp = slave.light_sensor.get_chart_data(from_timestamp=last_timestamp + 1)
 
-    return render_template('chart.html',
-            chart_labels_json=('[' + (','.join(label)) + ']'),
-            chart_data_json=('[' + (','.join(data)) + ']'),
-            chart_last_timestamp=last_timestamp)
+    if request.method == 'GET':
+        return render_template('chart.html',
+                chart_labels_json=('[' + (','.join(label)) + ']'),
+                chart_data_json=('[' + (','.join(data)) + ']'),
+                chart_last_timestamp=last_timestamp)
+    if request.method == 'POST':
+        return jsonify({
+            'label': label,
+            'data': data,
+            'last_timestamp': last_timestamp
+        })
 
 
 @app.route('/settings', methods=['GET', 'POST'])

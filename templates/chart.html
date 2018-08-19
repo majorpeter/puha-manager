@@ -19,9 +19,10 @@
 </main>
 
 <script>
-var ctx = document.getElementById("chart").getContext('2d');
 var chart_last_timestamp = {{ chart_last_timestamp }};
-var myChart = new Chart(ctx, {
+
+var ctx = document.getElementById("chart").getContext('2d');
+var config = {
     type: 'line',
     data: {
         labels: {{ chart_labels_json|safe }},
@@ -34,6 +35,20 @@ var myChart = new Chart(ctx, {
             display: false
         }
     }
-});
+};
+var myChart = new Chart(ctx, config);
+
+function append_new_chart_data() {
+    $.post('/chart', {last_timestamp: chart_last_timestamp}, function(data) {
+        for (key in data['data']) {
+            config.data.labels.push(data['label'][key]);
+            config.data.datasets[0].data.push(data['data'][key]);
+        }
+        myChart.update();
+        chart_last_timestamp = data['last_timestamp'];
+    });
+};
+
+setInterval(append_new_chart_data, 3000);
 </script>
 {% include "footer.html" %}
