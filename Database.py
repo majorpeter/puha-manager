@@ -15,7 +15,7 @@ class Database:
         self._queue = Queue()
         self._outqueue = Queue(maxsize=1)
 
-        Thread(target=self.thread_func).start()
+        Thread(target=self.thread_func, daemon=True).start()
         Database.instance = self
 
     def thread_func(self):
