@@ -95,12 +95,12 @@ def chart(sensor, title=None, y_label=None, dataset_color=None):
 
 @app.route('/illuminance', methods=['GET', 'POST'])
 def illuminance_chart():
-    return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)', dataset_color=[75, 192, 192])
+    return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)', dataset_color=[238, 229, 25])
 
 
 @app.route('/temperature', methods=['GET', 'POST'])
 def temperature_chart():
-    return chart(slave.temperature_sensor, title='Temperature', y_label='Temperature (C)', dataset_color=[75, 192, 192])
+    return chart(slave.temperature_sensor, title='Temperature', y_label='Temperature (C)', dataset_color=[224, 120, 23])
 
 
 @app.route('/humidity', methods=['GET', 'POST'])
