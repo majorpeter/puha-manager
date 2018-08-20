@@ -4,6 +4,7 @@ import logging
 from flask import Flask, render_template, request
 from flask.json import jsonify
 
+from Database import Database
 from LightControl import LightControl
 from Slave import Slave
 
@@ -11,6 +12,7 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 app = Flask(__name__)
 with open('config.json') as config_file:
     config = json.load(config_file)
+Database()
 
 slave_params = config['slaves'][0] #TODO support more slaves!
 slave = Slave(slave_params['ip'], slave_params['port'], config)

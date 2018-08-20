@@ -1,13 +1,21 @@
 from datetime import datetime
 from threading import Lock
 
+from Database import Database
+
 
 class LoggedSensor:
     """
     This is a common base class for all sensors that have data to be stored/logged.
     """
 
-    def __init__(self, max_measurements=200, holdoff_time=None):
+    registered_type_ids = []
+
+    def __init__(self, type_id, max_measurements=200, holdoff_time=None):
+        if type_id is LoggedSensor.registered_type_ids:
+            raise BaseException('Type ID already exists: %d' % type_id)
+
+        self.type_id = type_id
         self.data = []
         self.max_measurements = max_measurements
         self.holdoff_time = holdoff_time
@@ -27,6 +35,7 @@ class LoggedSensor:
                 del self.data[0]
 
             self.data.append({'time': now, 'measurement': measurement})
+            Database.instance.insert_measurement(now.timestamp(), self.type_id, measurement)
 
     def get_chart_data(self, from_timestamp=0):
         label = []

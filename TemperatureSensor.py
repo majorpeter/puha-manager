@@ -5,7 +5,7 @@ from LoggedSensor import LoggedSensor
 
 class TemperatureSensor(LoggedSensor):
     def __init__(self, node):
-        super(TemperatureSensor, self).__init__(max_measurements=500, holdoff_time=timedelta(minutes=1))
+        super(TemperatureSensor, self).__init__(type_id=1, max_measurements=500, holdoff_time=timedelta(minutes=1))
 
         node.Temperature.subscribe_to_changes(self.on_property_changed)
 

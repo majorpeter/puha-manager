@@ -5,7 +5,7 @@ from LoggedSensor import LoggedSensor
 
 class LightSensor(LoggedSensor):
     def __init__(self, node):
-        super(LightSensor, self).__init__(max_measurements=500, holdoff_time=timedelta(seconds=30))
+        super(LightSensor, self).__init__(type_id=3, max_measurements=500, holdoff_time=timedelta(seconds=30))
 
         self.node = node
         self.illuminance = 0
