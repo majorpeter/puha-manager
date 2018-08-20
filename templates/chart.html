@@ -42,14 +42,24 @@ var config = {
             display: false
         },
         scales: {
-        {% if y_scale_label %}
            yAxes: [{
+                {% if y_scale_label %}
                 scaleLabel: {
                     display: true,
                     labelString: '{{ y_scale_label }}'
-                }
+                },
+                {% if suggested_min is not none or suggested_max is not none %}
+                ticks: {
+                    {% if suggested_min is not none %}
+                    suggestedMin: {{ suggested_min}},
+                    {% endif %}
+                    {% if suggested_max is not none %}
+                    suggestedMax: {{ suggested_max}},
+                    {% endif %}
+                },
+                {% endif %}
+                {% endif %}
             }],
-        {% endif %}
         },
     }
 };

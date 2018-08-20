@@ -68,7 +68,7 @@ def light_sensor():
     })
 
 
-def chart(sensor, title=None, y_label=None, dataset_color=None):
+def chart(sensor, title=None, y_label=None, suggested_min=None, suggested_max=None, dataset_color=None):
     last_timestamp = 0
     if request.method == 'POST' and 'last_timestamp' in request.form:
         last_timestamp = int(request.form['last_timestamp'])
@@ -78,6 +78,8 @@ def chart(sensor, title=None, y_label=None, dataset_color=None):
         return render_template('chart.html',
                 chart_title=title,
                 y_scale_label=y_label,
+                suggested_min=suggested_min,
+                suggested_max=suggested_max,
                 dataset_color='rgba({0},{1},{2},0.5)'.format(*dataset_color),
                 dataset_border_color='rgb({0},{1},{2})'.format(*dataset_color),
                 refresh_period_ms=int(sensor.holdoff_time.total_seconds() / 2 * 1000),
@@ -95,17 +97,31 @@ def chart(sensor, title=None, y_label=None, dataset_color=None):
 
 @app.route('/illuminance', methods=['GET', 'POST'])
 def illuminance_chart():
-    return chart(slave.light_sensor, title='Illuminance', y_label='Illuminance (lx)', dataset_color=[238, 229, 25])
+    return chart(slave.light_sensor,
+                 title='Illuminance',
+                 y_label='Illuminance (lx)',
+                 suggested_min=0,
+                 dataset_color=[238, 229, 25])
 
 
 @app.route('/temperature', methods=['GET', 'POST'])
 def temperature_chart():
-    return chart(slave.temperature_sensor, title='Temperature', y_label='Temperature (C)', dataset_color=[224, 120, 23])
+    return chart(slave.temperature_sensor,
+                 title='Temperature',
+                 y_label='Temperature (C)',
+                 suggested_min=20,
+                 suggested_max=30,
+                 dataset_color=[224, 120, 23])
 
 
 @app.route('/humidity', methods=['GET', 'POST'])
 def humidity_chart():
-    return chart(slave.humidity_sensor, title='Relative Humidity', y_label='R/H (%)', dataset_color=[75, 192, 192])
+    return chart(slave.humidity_sensor,
+                 title='Relative Humidity',
+                 y_label='R/H (%)',
+                 suggested_min=0,
+                 suggested_max=100,
+                 dataset_color=[75, 192, 192])
 
 
 @app.route('/settings', methods=['GET', 'POST'])
