@@ -42,6 +42,12 @@ var config = {
             display: false
         },
         scales: {
+           xAxes: [{
+                type: 'time',
+                time: {
+                    format: 'HH:mm::ss',
+                },
+           }],
            yAxes: [{
                 {% if y_scale_label %}
                 scaleLabel: {
