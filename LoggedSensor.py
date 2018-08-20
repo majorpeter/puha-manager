@@ -21,6 +21,8 @@ class LoggedSensor:
         self.holdoff_time = holdoff_time
         self.lock = Lock()
 
+        with self.lock:
+            self.data = Database.instance.fetch_latest_measurements(self.type_id, self.max_measurements)
 
     def add_measurement(self, measurement):
         now = datetime.now().timestamp()
