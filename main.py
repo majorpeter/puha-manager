@@ -23,13 +23,18 @@ Database(db_path)
 slave_params = config['slaves'][0] #TODO support more slaves!
 slave = Slave(slave_params['ip'], slave_params['port'], config)
 
+header_data = {
+    'site_title': config['site_title']
+}
+
+
 @app.route('/')
 def index():
     data = []
     time_delta = slave.motion_sensor.get_time_since_last_movement()
     data.append(('Last movement', '%d sec ago' % time_delta.seconds))
 
-    return render_template('index.html', data=data)
+    return render_template('index.html', **header_data, data=data)
 
 
 @app.route('/led', methods=['GET', 'POST'])
@@ -84,6 +89,7 @@ def chart(sensor, title=None, y_label=None, suggested_min=None, suggested_max=No
 
     if request.method == 'GET':
         return render_template('chart.html',
+                **header_data,
                 chart_title=title,
                 y_scale_label=y_label,
                 suggested_min=suggested_min,
@@ -149,7 +155,7 @@ def settings_page():
             with open('config.json', 'w') as config_file:
                 json.dump(config, config_file, indent=4)
 
-    return render_template('settings.html', config=config, setting_error=setting_error)
+    return render_template('settings.html', **header_data, config=config, setting_error=setting_error)
 
 
 @app.route('/log')
