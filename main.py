@@ -10,10 +10,12 @@ from Database import Database
 from LightControl import LightControl
 from Slave import Slave
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 app = Flask(__name__)
 with open('config.json') as config_file:
     config = json.load(config_file)
+
+log_path = config['log_file_path'] if 'log_file_path' in config else tempfile.gettempdir() + os.path.sep + 'puha-manager.log'
+logging.basicConfig(filename=log_path, format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 db_path = config['db_file_path'] if 'db_file_path' in config else tempfile.gettempdir() + os.path.sep + 'puha-manager-data.db'
 Database(db_path)
