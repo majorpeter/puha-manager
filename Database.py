@@ -8,9 +8,11 @@ class Database:
     MEASUREMENTS_TABLE = 'measurements'
     MEASUREMENTS_SORT_FIELD = 'ts'
 
-    def __init__(self):
+    def __init__(self, file_path):
         if Database.instance is not None:
             raise BaseException('Database already exists!')
+
+        self.file_path = file_path
 
         self._queue = Queue()
         self._outqueue = Queue(maxsize=1)
@@ -19,7 +21,7 @@ class Database:
         Database.instance = self
 
     def thread_func(self):
-        self.db = sqlite3.connect('data.db')
+        self.db = sqlite3.connect(self.file_path)
 
         c = self.db.cursor()
         c.execute('SELECT count(*) FROM sqlite_master WHERE type = \'table\' AND tbl_name = :name',

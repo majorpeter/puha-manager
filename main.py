@@ -1,5 +1,7 @@
 import json
 import logging
+import os
+import tempfile
 
 from flask import Flask, render_template, request
 from flask.json import jsonify
@@ -12,7 +14,9 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 app = Flask(__name__)
 with open('config.json') as config_file:
     config = json.load(config_file)
-Database()
+
+db_path = config['db_file_path'] if 'db_file_path' in config else tempfile.gettempdir() + os.path.sep + 'puha-manager-data.db'
+Database(db_path)
 
 slave_params = config['slaves'][0] #TODO support more slaves!
 slave = Slave(slave_params['ip'], slave_params['port'], config)
