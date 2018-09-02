@@ -3,7 +3,7 @@ import logging
 import os
 import tempfile
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from flask.json import jsonify
 
 from Database import Database
@@ -150,6 +150,12 @@ def settings_page():
                 json.dump(config, config_file, indent=4)
 
     return render_template('settings.html', config=config, setting_error=setting_error)
+
+
+@app.route('/log')
+def log_view():
+    with open(log_path, 'r') as log_file:
+        return Response(log_file.read(), mimetype='text/plain')
 
 
 if __name__ == '__main__':
