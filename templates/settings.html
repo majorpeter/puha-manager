@@ -13,6 +13,13 @@
                 <form method="post">
                     <div class="row">
                         <div class="input-field">
+                            <input name="site_title" id="site_title" type="text" value="{{config['site_title']}}">
+                            <label for="site_title" class="active">Site title</label>
+                            <span class="helper-text">The text displayed on the navigation bar and in the HTML title field.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
                             <input name="motion_timeout_sec" id="motion_timeout_sec" type="text" value="{{config['motion_timeout_sec']}}">
                             <label for="motion_timeout_sec" class="active">Motion timeout (sec)</label>
                             <span class="helper-text">How long do the lights stay on after movement is detected in night-time mode (in seconds.)</span>

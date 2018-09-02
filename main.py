@@ -144,6 +144,9 @@ def settings_page():
     if request.method == 'POST':
         if 'apply' in request.form:
             try:
+                config['site_title'] = request.form['site_title']
+                header_data['site_title'] = config['site_title']
+
                 config['motion_timeout_sec'] = float(request.form['motion_timeout_sec'])
                 config['target_nighttime_illuminance'] = float(request.form['target_nighttime_illuminance'])
                 config['light_sensor_quantization_error'] = float(request.form['light_sensor_quantization_error'])
