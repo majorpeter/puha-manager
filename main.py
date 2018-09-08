@@ -3,8 +3,9 @@ import logging
 import os
 import tempfile
 
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, url_for
 from flask.json import jsonify
+from werkzeug.utils import redirect
 
 from Database import Database
 from LightControl import LightControl
@@ -73,7 +74,8 @@ def ledstrip_control():
         if 'rgb' in request.form:
             rgb_colors = list(map(int, request.form['rgb'].split(',')))
             if 'animate' not in request.form:
-                slave.light_control.mode = LightControl.Mode.Manual
+                if slave.light_control is not None:
+                    slave.light_control.mode = LightControl.Mode.Manual
                 slave.ledstrip.set_color_rgb(rgb_colors)
             else:
                 if slave.light_control is not None:
@@ -194,6 +196,16 @@ def settings_page():
     update_header_data(request)
     return render_template('settings.html', **header_data, config=config, setting_error=setting_error)
 
+
+@app.route('/selectslave/<int:index>')
+def select_slave(index):
+    global selected_slave_index, slave, slaves, header_data
+
+    selected_slave_index = index
+    slave = slaves[selected_slave_index]
+    header_data['slave_index'] = selected_slave_index
+
+    return redirect(url_for('index'))
 
 @app.route('/log')
 def log_view():
