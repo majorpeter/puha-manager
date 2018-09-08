@@ -18,7 +18,7 @@
 <header>
     <nav>
         <div class="nav-wrapper teal">
-            <a href="/" class="brand-logo">{{ site_title }}</a>
+            <a href="/" class="brand-logo"><img src="static/img/logo.png"/>&nbsp;{{ site_title }}</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 {% for item in navigation %}
                 <li{% if item['url'] == request_path %} class="active"{% endif %}><a href="{{ item['url'] }}">{{ item['name'] }}</a></li>
