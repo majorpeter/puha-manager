@@ -41,6 +41,11 @@ $(document).ready(function() {
         });
         update_kept_illuminance_visiblity_and_value_from_server();
     });
+    $('button#animate-btn').click(function() {
+        $.post('/lightcontrol', {
+            mode: 'animate',
+        });
+    });
 
     $('input#kept-illuminance').on('input', function() {
         if ($('input[name="led-control-mode"]:checked').val() == 'KeepIlluminance') {

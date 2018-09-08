@@ -3,12 +3,16 @@ from enum import Enum
 from threading import Thread
 from time import sleep
 
+from Animation import KnightRiderAnimation
+from LedStrip import LedStrip
+
 
 class LightControl:
     class Mode(Enum):
         Manual = 0
         NightTime = 1
         KeepIlluminance = 2
+        Animate = 3
 
     CONTROL_LOOP_FREQUENCY_HZ = 30
 
@@ -40,6 +44,13 @@ class LightControl:
         else:
             self.initial_illuminance = illuminance
 
+        if mode == LightControl.Mode.Animate:
+            self.led_strip.set_animation(
+                KnightRiderAnimation(led_count=LedStrip.LED_COUNT, active_led_count=120, color=[255, 0, 0],
+                                     length=20, speed=20))
+        else:
+            self.led_strip.clear_animation()
+
     def control_loop_thread_func(self):
         """
         updates light control according to configuration
@@ -50,17 +61,17 @@ class LightControl:
           1/T_t -> 'light_control_anti_windup_time'
         """
         while True:
-            if self.mode == LightControl.Mode.Manual:
-                # no need for control
-                sleep(1) #TODO event instead?
-                continue
-            elif self.mode == LightControl.Mode.NightTime:
+            if self.mode == LightControl.Mode.NightTime:
                 if self.motion_sensor.get_time_since_last_movement() > timedelta(seconds=self.config['motion_timeout_sec']):
                     target_illuminance = 0
                 else:
                     target_illuminance = self.config['target_nighttime_illuminance']
-            else: # KeepIlluminance
+            elif self.mode == LightControl.Mode.KeepIlluminance:
                 target_illuminance = self.initial_illuminance
+            else:
+                # no need for control
+                sleep(1) #TODO event instead?
+                continue
 
             error = target_illuminance - self.light_sensor.illuminance
             # since the measurement is quantized, the error can never reach zero

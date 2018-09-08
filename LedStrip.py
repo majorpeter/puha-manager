@@ -20,6 +20,10 @@ class LedStrip:
         self.thread = Thread(target=self.thread_function, daemon=True)
         self.thread.start()
 
+    def set_animation(self, animation):
+        self.animation = animation
+        self.update_event.set()
+
     def clear_animation(self):
         self.animation = None
         self.update_event.set()
