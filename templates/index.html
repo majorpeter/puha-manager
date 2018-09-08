@@ -12,7 +12,7 @@
                             <ul class="tabs teal-text">
                                 <li class="tab"><a href="#led-tune-rgb" class="active">RGB</a></li>
                                 <li class="tab"><a href="#led-tune-hsl">HSL</a></li>
-                                <li class="tab"><a href="#led-tune-control">Control</a></li>
+                                {% if light_control %}<li class="tab"><a href="#led-tune-control">Control</a></li>{% endif %}
                             </ul>
                         </div>
                         <div class="card-content">
@@ -72,6 +72,7 @@
                                     </td></tr>
                                 </tbody></table>
                             </div>
+                            {% if light_control %}
                             <div id="led-tune-control">
                                 <p>
                                     <label title="Do not control lights automatically.">
@@ -101,6 +102,7 @@
                                     </label>
                                 </p>
                             </div>
+                            {% endif %}
                         </div>
                         <div class="card-action">
                             <a href="#" id="led-undo" class="teal-text no-break" style="display: none;"><i class="tiny material-icons">undo</i> Revert</a>
