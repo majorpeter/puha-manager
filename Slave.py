@@ -8,8 +8,9 @@ from mprotocol_client_python.Client import Client
 
 
 class Slave:
-    def __init__(self, ip_address, port, config):
+    def __init__(self, ip_address, port, name, config):
         self.client = Client(ip_address, port, timeout=1)
+        self.name = name
 
         self.ledstrip = None
         self.temperature_sensor = None

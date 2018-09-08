@@ -20,8 +20,14 @@ logging.basicConfig(filename=log_path, format='%(asctime)s %(message)s', level=l
 db_path = config['db_file_path'] if 'db_file_path' in config else tempfile.gettempdir() + os.path.sep + 'puha-manager-data.db'
 Database(db_path)
 
-slave_params = config['slaves'][0] #TODO support more slaves!
-slave = Slave(slave_params['ip'], slave_params['port'], config)
+slaves = []
+slave_names = []
+for slave_params in config['slaves']:
+    slaves.append(Slave(slave_params['ip'], slave_params['port'], slave_params['name'], config))
+    slave_names.append(slave_params['name'])
+
+selected_slave_index = 0
+slave = slaves[selected_slave_index]
 
 header_data = {
     'site_title': config['site_title'],

@@ -3,7 +3,8 @@
   "slaves": [
     {
       "ip": "192.168.0.211",
-      "port": 23
+      "port": 23,
+      "name": "Living Room"
     }
   ],
   "motion_timeout_sec": 15,
