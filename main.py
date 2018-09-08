@@ -51,8 +51,9 @@ def update_header_data(request):
 @app.route('/')
 def index():
     data = []
-    time_delta = slave.motion_sensor.get_time_since_last_movement()
-    data.append(('Last movement', '%d sec ago' % time_delta.seconds))
+    if slave.motion_sensor is not None:
+        time_delta = slave.motion_sensor.get_time_since_last_movement()
+        data.append(('Last movement', '%d sec ago' % time_delta.seconds))
 
     update_header_data(request)
     return render_template('index.html', **header_data, data=data)
@@ -67,11 +68,13 @@ def ledstrip_control():
                 slave.light_control.mode = LightControl.Mode.Manual
                 slave.ledstrip.set_color_rgb(rgb_colors)
             else:
-                slave.light_control.mode = LightControl.Mode.Manual
+                if slave.light_control is not None:
+                    slave.light_control.mode = LightControl.Mode.Manual
                 slave.ledstrip.animate_to_rgb(rgb_colors, float(request.form['animate']))
         elif 'hsl' in request.form:
             hsl_colors = list(map(int, request.form['hsl'].split(',')))
-            slave.light_control.mode = LightControl.Mode.Manual
+            if slave.light_control is not None:
+                slave.light_control.mode = LightControl.Mode.Manual
             slave.ledstrip.set_color_hsl(hsl_colors)
         return ''
     elif request.method == 'GET':

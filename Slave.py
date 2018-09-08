@@ -12,7 +12,12 @@ class Slave:
         self.client = Client(ip_address, port, timeout=1)
 
         self.ledstrip = None
+        self.temperature_sensor = None
+        self.humidity_sensor = None
         self.light_sensor = None
+        self.motion_sensor = None
+        self.light_control = None
+
         for node in self.client.root.get_children():
             if node.get_name() == 'LEDSTRIP':
                 self.ledstrip = LedStrip(node)
