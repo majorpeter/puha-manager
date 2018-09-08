@@ -47,6 +47,8 @@ header_data = {
         'url': '/settings',
         'name': 'Settings'
     }],
+    'slaves': slave_names,
+    'slave_index': selected_slave_index,
 }
 
 

@@ -16,3 +16,8 @@ div#led-tune-hsl div.hue-gradient {
 a.no-break {
         white-space: nowrap;
 }
+
+li#slave-select {
+    min-width: 220px;
+    margin-right: 60px;
+}

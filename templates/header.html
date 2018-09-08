@@ -16,10 +16,16 @@
 </head>
 <body>
 <header>
+    <ul id="slave-select-dropdown" class="dropdown-content">
+        {% for slave in slaves %}
+        <li><a href="#!"><i class="material-icons">{% if loop.index0 == slave_index %}radio_button_checked{% else %}radio_button_unchecked{% endif %}</i> {{slave}}</a></li>
+        {% endfor %}
+    </ul>
     <nav>
         <div class="nav-wrapper teal">
             <a href="/" class="brand-logo"><img src="static/img/logo.png"/>&nbsp;{{ site_title }}</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <ul class="right hide-on-med-and-down">
+                <li id="slave-select"><a class="dropdown-trigger" href="#!" data-target="slave-select-dropdown">{{ slaves[slave_index] }}<i class="material-icons right">arrow_drop_down</i></a></li>
                 {% for item in navigation %}
                 <li{% if item['url'] == request_path %} class="active"{% endif %}><a href="{{ item['url'] }}">{{ item['name'] }}</a></li>
                 {% endfor %}
