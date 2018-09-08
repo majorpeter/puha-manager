@@ -24,7 +24,23 @@ slave_params = config['slaves'][0] #TODO support more slaves!
 slave = Slave(slave_params['ip'], slave_params['port'], config)
 
 header_data = {
-    'site_title': config['site_title']
+    'site_title': config['site_title'],
+    'navigation': [{
+        'url': '/',
+        'name': 'LED Control'
+    }, {
+        'url': '/temperature',
+        'name': 'Temperature'
+    }, {
+        'url': '/humidity',
+        'name': 'Humidity'
+    }, {
+        'url': '/illuminance',
+        'name': 'Illuminance'
+    }, {
+        'url': '/settings',
+        'name': 'Settings'
+    }],
 }
 
 
