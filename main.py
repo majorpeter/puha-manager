@@ -44,12 +44,17 @@ header_data = {
 }
 
 
+def update_header_data(request):
+    header_data['request_path'] = request.path
+
+
 @app.route('/')
 def index():
     data = []
     time_delta = slave.motion_sensor.get_time_since_last_movement()
     data.append(('Last movement', '%d sec ago' % time_delta.seconds))
 
+    update_header_data(request)
     return render_template('index.html', **header_data, data=data)
 
 
@@ -104,6 +109,7 @@ def chart(sensor, title=None, y_label=None, suggested_min=None, suggested_max=No
     label, data, last_timestamp = sensor.get_chart_data(from_timestamp=last_timestamp + 1)
 
     if request.method == 'GET':
+        update_header_data(request)
         return render_template('chart.html',
                 **header_data,
                 chart_title=title,
@@ -174,6 +180,7 @@ def settings_page():
             with open('config.json', 'w') as config_file:
                 json.dump(config, config_file, indent=4)
 
+    update_header_data(request)
     return render_template('settings.html', **header_data, config=config, setting_error=setting_error)
 
 
