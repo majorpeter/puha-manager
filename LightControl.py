@@ -28,6 +28,15 @@ class LightControl:
         self.integrator = 0
         self.mode = LightControl.Mode.Manual
 
+        self.animation_collection = [
+            {'name': 'Knight Rider', 'object':
+                KnightRiderAnimation(led_count=LedStrip.LED_COUNT, active_led_count=120,
+                                     color=[255, 0, 0], length=20, speed=20)},
+            {'name': 'Knight Rider (KARR)', 'object':
+                KnightRiderAnimation(led_count=LedStrip.LED_COUNT, active_led_count=120,
+                                     color=[255, 40, 0], length=20, speed=20)}
+        ]
+
         self.control_loop_thread = Thread(target=self.control_loop_thread_func, daemon=True)
         self.control_loop_thread.start()
 
@@ -45,9 +54,7 @@ class LightControl:
             self.initial_illuminance = illuminance
 
         if mode == LightControl.Mode.Animate:
-            self.led_strip.set_animation(
-                KnightRiderAnimation(led_count=LedStrip.LED_COUNT, active_led_count=120, color=[255, 0, 0],
-                                     length=20, speed=20))
+            self.led_strip.set_animation(self.animation_collection[0]['object'])
         else:
             self.led_strip.clear_animation()
 

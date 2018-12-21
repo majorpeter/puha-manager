@@ -65,7 +65,12 @@ def index():
         data.append(('Last movement', '%d sec ago' % time_delta.seconds))
 
     update_header_data(request)
-    return render_template('index.html', **header_data, data=data, light_control=slave.light_control is not None)
+    animations = None
+    if slave.light_control is not None:
+        animations = []
+        for item in slave.light_control.animation_collection:
+            animations.append(item['name'])
+    return render_template('index.html', **header_data, data=data, light_control=slave.light_control is not None, animations=animations)
 
 
 @app.route('/led', methods=['GET', 'POST'])

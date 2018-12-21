@@ -103,9 +103,9 @@
                                     <div id="animation-select" class="hide">
                                         <select>
                                             <option value="" disabled selected>Choose animation</option>
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
+                                            {% for item in animations %}
+                                            <option value="{{loop.index}}">{{item}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </p>
