@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from random import randint
 
 
 class Animation:
@@ -80,10 +81,11 @@ class XmasAnimation(Animation):
         [60, 20, 0], # yellow
     ]
 
-    SPEED = 0.1
+    SPEED = 0.02
 
-    def __init__(self, led_count):
+    def __init__(self, led_count, randomize_channel):
         super(XmasAnimation, self).__init__(led_count)
+        self.randomize_channel = randomize_channel
         self.last_time = datetime.now()
         self.brightnesses = [0, 0, 0, 0]
         self.channel_index = 0
@@ -103,9 +105,12 @@ class XmasAnimation(Animation):
         elif self.brightnesses[self.channel_index] < 0:
             self.brightnesses[self.channel_index] = 0
             self.direction = 1
-            self.channel_index += 1
-            if self.channel_index == pattern_length:
-                self.channel_index = 0
+
+            if self.randomize_channel:
+                self.channel_index = (self.channel_index + randint(1, pattern_length - 1)) % pattern_length
+            else:
+                # simply next channel with wrapping
+                self.channel_index = (self.channel_index + 1) % pattern_length
 
         result = [[0, 0, 0]] * self.led_count
         for i in range(int(self.led_count / pattern_length)):

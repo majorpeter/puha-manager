@@ -37,7 +37,7 @@ class LightControl:
                 KnightRiderAnimation(led_count=LedStrip.LED_COUNT, active_led_count=120,
                                      color=[255, 40, 0], length=20, speed=20)},
             {'name': 'Xmas', 'object':
-                XmasAnimation(led_count=LedStrip.LED_COUNT)}
+                XmasAnimation(led_count=LedStrip.LED_COUNT, randomize_channel=True)}
         ]
 
         self.control_loop_thread = Thread(target=self.control_loop_thread_func, daemon=True)
