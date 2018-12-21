@@ -116,7 +116,11 @@ function update_kept_illuminance_visiblity_and_value_from_server() {
 
 function update_animation_select_visibility_and_value_from_server() {
     if ($('input[name="led-control-mode"]:checked').val() == 'Animate') {
-        $('div#animation-select-wrapper').removeClass('hide');
+        $.get('/lightcontrol', function(data) {
+            $('select#animation-select').val(data['anim_index']);
+            M.FormSelect.getInstance($('select#animation-select'))._setValueToInput();
+            $('div#animation-select-wrapper').removeClass('hide');
+        });
     } else {
         $('div#animation-select-wrapper').addClass('hide');
     }

@@ -27,6 +27,7 @@ class LightControl:
         self.initial_illuminance = 0
         self.integrator = 0
         self.mode = LightControl.Mode.Manual
+        self.animation_index = -1
 
         self.animation_collection = [
             {'name': 'Knight Rider', 'object':
@@ -54,8 +55,10 @@ class LightControl:
             self.initial_illuminance = illuminance
 
         if mode == LightControl.Mode.Animate:
-            if animation_index is not None and animation_index < len(self.animation_collection):
-                self.led_strip.set_animation(self.animation_collection[animation_index]['object'])
+            if animation_index is not None:
+                self.animation_index = animation_index
+            if -1 < self.animation_index < len(self.animation_collection):
+                self.led_strip.set_animation(self.animation_collection[self.animation_index]['object'])
         else:
             self.led_strip.clear_animation()
 

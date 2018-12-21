@@ -111,7 +111,8 @@ def light_control():
         return ''
     elif request.method == 'GET':
         return jsonify({
-            'mode': str(slave.light_control.mode)
+            'mode': str(slave.light_control.mode),
+            'anim_index': slave.light_control.animation_index
         })
 
 
