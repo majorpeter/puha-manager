@@ -100,6 +100,14 @@
                                         <input name="led-control-mode" type="radio" value="Animate"/>
                                         <span>Animate</span>
                                     </label>
+                                    <div id="animation-select" class="hide">
+                                        <select>
+                                            <option value="" disabled selected>Choose animation</option>
+                                            <option value="1">Option 1</option>
+                                            <option value="2">Option 2</option>
+                                            <option value="3">Option 3</option>
+                                        </select>
+                                    </div>
                                 </p>
                             </div>
                             {% endif %}
@@ -151,6 +159,7 @@ if (activeLedTab != null) {
 }
 
 $('.tabs').tabs();
+$('select').formSelect();
 </script>
 
 {% include "footer.html" %}

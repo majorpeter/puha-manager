@@ -40,11 +40,7 @@ $(document).ready(function() {
             mode: this.value
         });
         update_kept_illuminance_visiblity_and_value_from_server();
-    });
-    $('button#animate-btn').click(function() {
-        $.post('/lightcontrol', {
-            mode: 'animate',
-        });
+        update_animation_select_visibility_and_value_from_server();
     });
 
     $('input#kept-illuminance').on('input', function() {
@@ -96,6 +92,7 @@ function update_light_control_from_server() {
     $.get('/lightcontrol', function(data) {
         $('input[name="led-control-mode"][value="' + data['mode'].split('.')[1] + '"]').prop('checked', true);
         update_kept_illuminance_visiblity_and_value_from_server();
+        update_animation_select_visibility_and_value_from_server();
     });
 }
 
@@ -107,6 +104,14 @@ function update_kept_illuminance_visiblity_and_value_from_server() {
         });
     } else {
         $('input#kept-illuminance').addClass('hide');
+    }
+}
+
+function update_animation_select_visibility_and_value_from_server() {
+    if ($('input[name="led-control-mode"]:checked').val() == 'Animate') {
+        $('div#animation-select').removeClass('hide');
+    } else {
+        $('div#animation-select').addClass('hide');
     }
 }
 
