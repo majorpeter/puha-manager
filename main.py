@@ -105,7 +105,9 @@ def light_control():
         illuminance = None
         if 'illuminance' in request.form:
             illuminance = float(request.form['illuminance'])
-        slave.light_control.set_mode(LightControl.Mode[request.form['mode']], illuminance)
+        slave.light_control.set_mode(mode=LightControl.Mode[request.form['mode']],
+                             illuminance=illuminance,
+                             animation_index=int(request.form['anim_index']) if 'anim_index' in request.form else None)
         return ''
     elif request.method == 'GET':
         return jsonify({

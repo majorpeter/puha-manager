@@ -40,7 +40,7 @@ class LightControl:
         self.control_loop_thread = Thread(target=self.control_loop_thread_func, daemon=True)
         self.control_loop_thread.start()
 
-    def set_mode(self, mode, illuminance=None):
+    def set_mode(self, mode, illuminance=None, animation_index=None):
         if mode in [LightControl.Mode.NightTime, LightControl.Mode.KeepIlluminance] and mode != self.mode:
             hsl = self.led_strip.get_color_hsl()
             self.hue = hsl[0]
@@ -54,7 +54,8 @@ class LightControl:
             self.initial_illuminance = illuminance
 
         if mode == LightControl.Mode.Animate:
-            self.led_strip.set_animation(self.animation_collection[0]['object'])
+            if animation_index is not None and animation_index < len(self.animation_collection):
+                self.led_strip.set_animation(self.animation_collection[animation_index]['object'])
         else:
             self.led_strip.clear_animation()
 

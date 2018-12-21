@@ -100,11 +100,11 @@
                                         <input name="led-control-mode" type="radio" value="Animate"/>
                                         <span>Animate</span>
                                     </label>
-                                    <div id="animation-select" class="hide">
-                                        <select>
+                                    <div id="animation-select-wrapper" class="hide">
+                                        <select id="animation-select">
                                             <option value="" disabled selected>Choose animation</option>
                                             {% for item in animations %}
-                                            <option value="{{loop.index}}">{{item}}</option>
+                                            <option value="{{loop.index - 1}}">{{item}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>

@@ -52,6 +52,13 @@ $(document).ready(function() {
         }
     });
 
+    $('select#animation-select').on('change', function() {
+        $.post('/lightcontrol', {
+            mode: 'Animate',
+            anim_index: this.value
+        });
+    });
+
     $('div#led-tabs a').click(function(e) {
         var tab = this.getAttribute('href');
         localStorage.setItem('activeLedTab', tab);
@@ -109,9 +116,9 @@ function update_kept_illuminance_visiblity_and_value_from_server() {
 
 function update_animation_select_visibility_and_value_from_server() {
     if ($('input[name="led-control-mode"]:checked').val() == 'Animate') {
-        $('div#animation-select').removeClass('hide');
+        $('div#animation-select-wrapper').removeClass('hide');
     } else {
-        $('div#animation-select').addClass('hide');
+        $('div#animation-select-wrapper').addClass('hide');
     }
 }
 
