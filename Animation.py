@@ -70,3 +70,46 @@ class KnightRiderAnimation(Animation):
         for i in range(self.position, self.position + self.length):
             result[i] = self.color[:]
         return result
+
+
+class XmasAnimation(Animation):
+    COLORS = [
+        [95, 0, 0], # red
+        [0, 75, 0], # green
+        [0, 0, 80], # blue
+        [60, 20, 0], # yellow
+    ]
+
+    SPEED = 0.1
+
+    def __init__(self, led_count):
+        super(XmasAnimation, self).__init__(led_count)
+        self.last_time = datetime.now()
+        self.brightnesses = [0, 0, 0, 0]
+        self.channel_index = 0
+        self.direction = 1
+
+    def step(self):
+        pattern_length = len(self.brightnesses)
+
+        now = datetime.now()
+        delta_time = now - self.last_time
+        self.last_time = now
+
+        self.brightnesses[self.channel_index] += self.direction * XmasAnimation.SPEED
+        if self.brightnesses[self.channel_index] > 1:
+            self.brightnesses[self.channel_index] = 1
+            self.direction = -1
+        elif self.brightnesses[self.channel_index] < 0:
+            self.brightnesses[self.channel_index] = 0
+            self.direction = 1
+            self.channel_index += 1
+            if self.channel_index == pattern_length:
+                self.channel_index = 0
+
+        result = [[0, 0, 0]] * self.led_count
+        for i in range(int(self.led_count / pattern_length)):
+            for j in range(pattern_length):
+                result[i* pattern_length + j] = [int(k * self.brightnesses[j]) for k in XmasAnimation.COLORS[j]]
+
+        return result

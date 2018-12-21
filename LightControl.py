@@ -3,7 +3,7 @@ from enum import Enum
 from threading import Thread
 from time import sleep
 
-from Animation import KnightRiderAnimation
+from Animation import KnightRiderAnimation, XmasAnimation
 from LedStrip import LedStrip
 
 
@@ -35,7 +35,9 @@ class LightControl:
                                      color=[255, 0, 0], length=20, speed=20)},
             {'name': 'Knight Rider (KARR)', 'object':
                 KnightRiderAnimation(led_count=LedStrip.LED_COUNT, active_led_count=120,
-                                     color=[255, 40, 0], length=20, speed=20)}
+                                     color=[255, 40, 0], length=20, speed=20)},
+            {'name': 'Xmas', 'object':
+                XmasAnimation(led_count=LedStrip.LED_COUNT)}
         ]
 
         self.control_loop_thread = Thread(target=self.control_loop_thread_func, daemon=True)
